@@ -3,18 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		641283FF2AE821410094A199 /* EchoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641283FE2AE821410094A199 /* EchoApp.swift */; };
-		641284012AE821410094A199 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641284002AE821410094A199 /* ContentView.swift */; };
-		641284032AE821410094A199 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641284022AE821410094A199 /* Item.swift */; };
 		641284052AE821420094A199 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 641284042AE821420094A199 /* Assets.xcassets */; };
 		641284082AE821420094A199 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 641284072AE821420094A199 /* Preview Assets.xcassets */; };
 		641284122AE821420094A199 /* EchoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641284112AE821420094A199 /* EchoTests.swift */; };
 		6412841C2AE821420094A199 /* EchoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6412841B2AE821420094A199 /* EchoUITests.swift */; };
 		6412841E2AE821420094A199 /* EchoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6412841D2AE821420094A199 /* EchoUITestsLaunchTests.swift */; };
+		643485A32AE84223008262EC /* Feed in Frameworks */ = {isa = PBXBuildFile; productRef = 643485A22AE84223008262EC /* Feed */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,8 +36,6 @@
 /* Begin PBXFileReference section */
 		641283FB2AE821410094A199 /* Echo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Echo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		641283FE2AE821410094A199 /* EchoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoApp.swift; sourceTree = "<group>"; };
-		641284002AE821410094A199 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		641284022AE821410094A199 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		641284042AE821420094A199 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		641284072AE821420094A199 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6412840D2AE821420094A199 /* EchoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EchoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,6 +43,8 @@
 		641284172AE821420094A199 /* EchoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EchoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6412841B2AE821420094A199 /* EchoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoUITests.swift; sourceTree = "<group>"; };
 		6412841D2AE821420094A199 /* EchoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		6434859D2AE8409E008262EC /* Feed */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Feed; sourceTree = "<group>"; };
+		64E46D382AE83B7200FA1352 /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Core; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				643485A32AE84223008262EC /* Feed in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +76,7 @@
 		641283F22AE821410094A199 = {
 			isa = PBXGroup;
 			children = (
+				641284542AE827A20094A199 /* Packages */,
 				641283FD2AE821410094A199 /* Echo */,
 				641284102AE821420094A199 /* EchoTests */,
 				6412841A2AE821420094A199 /* EchoUITests */,
@@ -97,8 +98,6 @@
 			isa = PBXGroup;
 			children = (
 				641283FE2AE821410094A199 /* EchoApp.swift */,
-				641284002AE821410094A199 /* ContentView.swift */,
-				641284022AE821410094A199 /* Item.swift */,
 				641284042AE821420094A199 /* Assets.xcassets */,
 				641284062AE821420094A199 /* Preview Content */,
 			);
@@ -130,6 +129,23 @@
 			path = EchoUITests;
 			sourceTree = "<group>";
 		};
+		641284542AE827A20094A199 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				643485A42AE85659008262EC /* Features */,
+				64E46D382AE83B7200FA1352 /* Core */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		643485A42AE85659008262EC /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				6434859D2AE8409E008262EC /* Feed */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -146,6 +162,9 @@
 			dependencies = (
 			);
 			name = Echo;
+			packageProductDependencies = (
+				643485A22AE84223008262EC /* Feed */,
+			);
 			productName = Echo;
 			productReference = 641283FB2AE821410094A199 /* Echo.app */;
 			productType = "com.apple.product-type.application";
@@ -218,6 +237,9 @@
 				Base,
 			);
 			mainGroup = 641283F22AE821410094A199;
+			packageReferences = (
+				643485A12AE84223008262EC /* XCLocalSwiftPackageReference "Packages/Feature/Feed" */,
+			);
 			productRefGroup = 641283FC2AE821410094A199 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -260,8 +282,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				641284012AE821410094A199 /* ContentView.swift in Sources */,
-				641284032AE821410094A199 /* Item.swift in Sources */,
 				641283FF2AE821410094A199 /* EchoApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -586,6 +606,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		643485A12AE84223008262EC /* XCLocalSwiftPackageReference "Packages/Feature/Feed" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Feature/Feed;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		643485A22AE84223008262EC /* Feed */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Feed;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 641283F32AE821410094A199 /* Project object */;
 }
