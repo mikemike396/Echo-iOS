@@ -4,11 +4,11 @@
 //  Created by Michael Kushinski on 10/24/23.
 //
 
-import Core
-import FeedKit
 import Models
+import Networking
 import SafariServices
 import SwiftUI
+import Utilities
 
 private extension URL {
     static let nineToFiveMac = URL(string: "https://9to5mac.com/feed/")

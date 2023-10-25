@@ -13,8 +13,8 @@
 		641284122AE821420094A199 /* EchoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641284112AE821420094A199 /* EchoTests.swift */; };
 		6412841C2AE821420094A199 /* EchoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6412841B2AE821420094A199 /* EchoUITests.swift */; };
 		6412841E2AE821420094A199 /* EchoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6412841D2AE821420094A199 /* EchoUITestsLaunchTests.swift */; };
-		643485A32AE84223008262EC /* Feed in Frameworks */ = {isa = PBXBuildFile; productRef = 643485A22AE84223008262EC /* Feed */; };
 		6442B31D2AE9489700ED892B /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 6442B31C2AE9489700ED892B /* Localizable.xcstrings */; };
+		6442B3232AE9688E00ED892B /* Feed in Frameworks */ = {isa = PBXBuildFile; productRef = 6442B3222AE9688E00ED892B /* Feed */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,8 +46,9 @@
 		6412841D2AE821420094A199 /* EchoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		6434859D2AE8409E008262EC /* Feed */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Feed; sourceTree = "<group>"; };
 		6442B31C2AE9489700ED892B /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		64B4C49D2AE8599800212746 /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
-		64E46D382AE83B7200FA1352 /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Core; sourceTree = "<group>"; };
+		646510E92AE96928001A524C /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
+		646510EA2AE96928001A524C /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Networking; sourceTree = "<group>"; };
+		646510EB2AE96928001A524C /* Utilities */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Utilities; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				643485A32AE84223008262EC /* Feed in Frameworks */,
+				6442B3232AE9688E00ED892B /* Feed in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,9 +137,8 @@
 		641284542AE827A20094A199 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				6442B31E2AE965A500ED892B /* Core */,
 				643485A42AE85659008262EC /* Features */,
-				64B4C49D2AE8599800212746 /* Models */,
-				64E46D382AE83B7200FA1352 /* Core */,
 			);
 			path = Packages;
 			sourceTree = "<group>";
@@ -149,6 +149,16 @@
 				6434859D2AE8409E008262EC /* Feed */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		6442B31E2AE965A500ED892B /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				646510E92AE96928001A524C /* Models */,
+				646510EA2AE96928001A524C /* Networking */,
+				646510EB2AE96928001A524C /* Utilities */,
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -168,7 +178,7 @@
 			);
 			name = Echo;
 			packageProductDependencies = (
-				643485A22AE84223008262EC /* Feed */,
+				6442B3222AE9688E00ED892B /* Feed */,
 			);
 			productName = Echo;
 			productReference = 641283FB2AE821410094A199 /* Echo.app */;
@@ -243,7 +253,7 @@
 			);
 			mainGroup = 641283F22AE821410094A199;
 			packageReferences = (
-				643485A12AE84223008262EC /* XCLocalSwiftPackageReference "Packages/Feature/Feed" */,
+				6442B3212AE9688E00ED892B /* XCLocalSwiftPackageReference "Packages/Features/Feed" */,
 			);
 			productRefGroup = 641283FC2AE821410094A199 /* Products */;
 			projectDirPath = "";
@@ -614,14 +624,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		643485A12AE84223008262EC /* XCLocalSwiftPackageReference "Packages/Feature/Feed" */ = {
+		6442B3212AE9688E00ED892B /* XCLocalSwiftPackageReference "Packages/Features/Feed" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/Feature/Feed;
+			relativePath = Packages/Features/Feed;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		643485A22AE84223008262EC /* Feed */ = {
+		6442B3222AE9688E00ED892B /* Feed */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Feed;
 		};

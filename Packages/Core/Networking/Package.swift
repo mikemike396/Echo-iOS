@@ -4,27 +4,26 @@
 import PackageDescription
 
 let package = Package(
-    name: "Feed",
-    defaultLocalization: "en",
+    name: "Networking",
     platforms: [.iOS(.v17)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "Feed",
-            targets: ["Feed"]),
+            name: "Networking",
+            targets: ["Networking"]),
     ],
     dependencies: [
-        .package(path: "../Core/Networking"),
-        .package(path: "../Core/Utilities"),
+        .package(url: "https://github.com/nmdias/FeedKit", exact: "9.1.2"),
+        .package(path: "Models"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "Feed",
-            dependencies: ["Networking", "Utilities"]),
+            name: "Networking",
+            dependencies: ["FeedKit", "Models"]),
         .testTarget(
-            name: "FeedTests",
-            dependencies: ["Feed"]),
+            name: "NetworkingTests",
+            dependencies: ["Networking"]),
     ]
 )

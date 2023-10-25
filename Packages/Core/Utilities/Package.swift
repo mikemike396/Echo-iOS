@@ -4,26 +4,21 @@
 import PackageDescription
 
 let package = Package(
-    name: "Core",
+    name: "Utilities",
     platforms: [.iOS(.v17)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "Core",
-            targets: ["Core"]),
-    ],
-    dependencies: [
-        .package(url: "https://github.com/nmdias/FeedKit", exact: "9.1.2"),
-        .package(path: "Models"),
+            name: "Utilities",
+            targets: ["Utilities"]),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "Core",
-            dependencies: ["FeedKit", "Models"]),
+            name: "Utilities"),
         .testTarget(
-            name: "CoreTests",
-            dependencies: ["Core"]),
+            name: "UtilitiesTests",
+            dependencies: ["Utilities"]),
     ]
 )
