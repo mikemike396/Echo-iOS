@@ -8,9 +8,11 @@
 import Foundation
 
 public struct RSSFeedResponse {
+    public let imageURL: URL?
     public let items: [RSSFeedResponseItem]
 
-    public init(items: [RSSFeedResponseItem]) {
+    public init(imageURL: URL?, items: [RSSFeedResponseItem]) {
+        self.imageURL = imageURL
         self.items = items
     }
 }

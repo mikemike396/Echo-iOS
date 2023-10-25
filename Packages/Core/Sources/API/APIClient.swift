@@ -11,7 +11,7 @@ public struct APIClient {
         let result = parser.parse()
         switch result {
         case .success(let feed):
-            return RSSFeedResponse(items: feed.rssFeed?.items?.compactMap { RSSFeedResponseItem(title: $0.title, link: $0.link, description: $0.description) } ?? [])
+            return RSSFeedResponse(imageURL: URL(string: feed.rssFeed?.image?.url ?? ""), items: feed.rssFeed?.items?.compactMap { RSSFeedResponseItem(title: $0.title, link: $0.link, description: $0.description, publishedDate: $0.pubDate) } ?? [])
         case .failure(let error):
             throw error
         }

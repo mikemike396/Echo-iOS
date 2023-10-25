@@ -10,11 +10,13 @@ public struct RSSFeedResponseItem {
     public let title: String?
     public let link: String?
     public let description: String?
+    public let publishedDate: Date?
 
-    public init(title: String?, link: String?, description: String?) {
+    public init(title: String?, link: String?, description: String?, publishedDate: Date?) {
         self.title = title
         self.link = link
         self.description = description
+        self.publishedDate = publishedDate
     }
 }
 

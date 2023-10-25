@@ -40,16 +40,26 @@ public struct FeedView: View {
     }
 
     private func cell(item: RSSFeedResponseItem) -> some View {
-        VStack {
+        HStack(alignment: .top, spacing: 0) {
+            AsyncImage(url: feed?.imageURL) { image in
+                image.image?.resizable()
+            }
+            .frame(width: 23, height: 23)
+            .padding(.trailing, 12)
+
             Text(item.title ?? "")
+                .font(.body)
+                .foregroundStyle(.primary)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .multilineTextAlignment(.leading)
-                .lineLimit(2)
-            Text(item.description ?? "")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .multilineTextAlignment(.leading)
-                .foregroundStyle(Color(UIColor.secondaryLabel))
-                .lineLimit(4)
+                .lineLimit(3)
+
+            Text(formattedPublishedDate(item.publishedDate) ?? "")
+                .font(.footnote)
+                .frame(alignment: .trailing)
+                .lineLimit(1)
+                .foregroundStyle(.secondary)
+                .padding(.leading, 4)
         }
     }
 
@@ -61,6 +71,14 @@ public struct FeedView: View {
 
         let vc = SFSafariViewController(url: url)
         UIApplication.shared.firstKeyWindow?.rootViewController?.present(vc, animated: true)
+    }
+
+    private func formattedPublishedDate(_ date: Date?) -> String? {
+        guard let date else { return nil }
+
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .abbreviated
+        return formatter.localizedString(for: date, relativeTo: Date())
     }
 }
 
