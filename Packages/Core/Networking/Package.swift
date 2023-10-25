@@ -14,14 +14,13 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/nmdias/FeedKit", exact: "9.1.2"),
-        .package(path: "Models"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "Networking",
-            dependencies: ["FeedKit", "Models"]),
+            dependencies: ["FeedKit"]),
         .testTarget(
             name: "NetworkingTests",
             dependencies: ["Networking"]),

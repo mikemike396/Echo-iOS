@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import Models
+import FeedKit
 
-protocol APIInterface {
-    func getRSSFeed(for url: URL?) async throws -> RSSFeedResponse?
+public protocol APIInterface {
+    func getRSSFeed(for url: URL?) async throws -> RSSFeed?
 }

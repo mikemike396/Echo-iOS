@@ -14,7 +14,7 @@ let package = Package(
             targets: ["Feed"]),
     ],
     dependencies: [
-        .package(path: "../Core/Networking"),
+        .package(path: "../Core/Data"),
         .package(path: "../Core/Utilities"),
     ],
     targets: [
@@ -22,7 +22,7 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "Feed",
-            dependencies: ["Networking", "Utilities"]),
+            dependencies: ["Data", "Utilities"]),
         .testTarget(
             name: "FeedTests",
             dependencies: ["Feed"]),

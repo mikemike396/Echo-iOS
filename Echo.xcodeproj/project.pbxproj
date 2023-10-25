@@ -46,9 +46,9 @@
 		6412841D2AE821420094A199 /* EchoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		6434859D2AE8409E008262EC /* Feed */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Feed; sourceTree = "<group>"; };
 		6442B31C2AE9489700ED892B /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
-		646510E92AE96928001A524C /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
 		646510EA2AE96928001A524C /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Networking; sourceTree = "<group>"; };
 		646510EB2AE96928001A524C /* Utilities */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Utilities; sourceTree = "<group>"; };
+		646510EC2AE96A9E001A524C /* Data */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Data; path = Packages/Core/Data; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,7 +154,7 @@
 		6442B31E2AE965A500ED892B /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				646510E92AE96928001A524C /* Models */,
+				646510EC2AE96A9E001A524C /* Data */,
 				646510EA2AE96928001A524C /* Networking */,
 				646510EB2AE96928001A524C /* Utilities */,
 			);

@@ -4,8 +4,7 @@
 //  Created by Michael Kushinski on 10/24/23.
 //
 
-import Models
-import Networking
+import Data
 import SafariServices
 import SwiftUI
 import Utilities
@@ -15,10 +14,13 @@ private extension URL {
 }
 
 public struct FeedScreen: View {
+    let feedRepo: FeedRepository
     @State var feed: RSSFeedResponse?
 
-    public init() {}
-    
+    public init(feedRepo: FeedRepository = FeedRepository()) {
+        self.feedRepo = feedRepo
+    }
+
     public var body: some View {
         VStack {
             List {
@@ -35,7 +37,7 @@ public struct FeedScreen: View {
         }
         .navigationTitle("Feed")
         .task {
-            feed = try? await APIClient().getRSSFeed(for: .nineToFiveMac)
+            feed = try? await feedRepo.getFeed(url: .nineToFiveMac)
         }
     }
 
