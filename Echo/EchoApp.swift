@@ -13,7 +13,7 @@ struct EchoApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                FeedView()
+                FeedScreen()
             }
         }
     }

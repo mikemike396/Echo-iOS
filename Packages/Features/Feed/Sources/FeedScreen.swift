@@ -1,5 +1,5 @@
 //
-//  FeedView.swift
+//  FeedScreen.swift
 //
 //  Created by Michael Kushinski on 10/24/23.
 //
@@ -14,7 +14,7 @@ private extension URL {
     static let nineToFiveMac = URL(string: "https://9to5mac.com/feed/")
 }
 
-public struct FeedView: View {
+public struct FeedScreen: View {
     @State var feed: RSSFeedResponse?
 
     public init() {}
@@ -83,5 +83,5 @@ public struct FeedView: View {
 }
 
 #Preview {
-    FeedView()
+    FeedScreen()
 }
