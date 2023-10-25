@@ -7,22 +7,34 @@
 
 import Foundation
 import Networking
+import SwiftData
 
 public class FeedRepository {
+    private let context: ModelContext
     private let api: APIInterface
 
-    public init(api: APIInterface = APIClient()) {
+    public init(container: ModelContainer = EchoModelContainer.shared.modelContainer, api: APIInterface = APIClient()) {
+        self.context = ModelContext(container)
         self.api = api
     }
 
-    public func getFeed(url: URL?) async throws -> RSSFeedResponse {
+    public func fetchFeed(url: URL?) async throws {
         let feed = try await api.getRSSFeed(for: url)
 
-        let imageURL = URL(string: feed?.image?.url ?? "")
+        var imageString = ""
+        if let imageLink = feed?.image?.url {
+            imageString = imageLink
+        } else {
+            imageString = "\(feed?.link ?? "")/favicon.ico"
+        }
+        let imageURL = URL(string: imageString)
         let items = feed?.items?.compactMap { item in
-            RSSFeedResponseItem(title: item.title, link: item.link, description: item.description, publishedDate: item.pubDate)
+            RSSFeedItem(title: item.title, link: item.link, publishedDate: item.pubDate)
         } ?? []
 
-        return RSSFeedResponse(imageURL: imageURL, items: items)
+        let newFeed = RSSFeed(title: feed?.title, link: feed?.link, imageURL: imageURL)
+        newFeed.items = items
+        
+        context.insert(newFeed)
     }
 }

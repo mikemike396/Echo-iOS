@@ -6,16 +6,27 @@
 
 import Data
 import SafariServices
+import SwiftData
 import SwiftUI
 import Utilities
 
 private extension URL {
     static let nineToFiveMac = URL(string: "https://9to5mac.com/feed/")
+    static let macRumors = URL(string: "https://feeds.macrumors.com/MacRumors-All")
 }
 
 public struct FeedScreen: View {
+    // MARK: Environment
+
+    @Environment(\.modelContext) private var modelContext
+
+    // MARK: Initialization
+
     let feedRepo: FeedRepository
-    @State var feed: RSSFeedResponse?
+
+    // MARK: SwiftData
+
+    @Query(sort: \RSSFeedItem.publishedDate, order: .reverse) private var items: [RSSFeedItem]
 
     public init(feedRepo: FeedRepository = FeedRepository()) {
         self.feedRepo = feedRepo
@@ -24,7 +35,7 @@ public struct FeedScreen: View {
     public var body: some View {
         VStack {
             List {
-                ForEach(feed?.items ?? []) { item in
+                ForEach(items) { item in
                     Button {
                         navigateToLink(item.link)
                     } label: {
@@ -37,13 +48,14 @@ public struct FeedScreen: View {
         }
         .navigationTitle("Feed")
         .task {
-            feed = try? await feedRepo.getFeed(url: .nineToFiveMac)
+            try? await feedRepo.fetchFeed(url: .nineToFiveMac)
+            try? await feedRepo.fetchFeed(url: .macRumors)
         }
     }
 
-    private func cell(item: RSSFeedResponseItem) -> some View {
+    private func cell(item: RSSFeedItem) -> some View {
         HStack(alignment: .top, spacing: 0) {
-            AsyncImage(url: feed?.imageURL) { image in
+            AsyncImage(url: item.feed?.imageURL) { image in
                 image.image?.resizable()
             }
             .frame(width: 23, height: 23)
