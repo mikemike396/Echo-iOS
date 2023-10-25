@@ -35,7 +35,7 @@ public struct FeedView: View {
         }
         .navigationTitle("Feed")
         .task {
-            feed = try? await APIClient.getRSSFeed(for: .nineToFiveMac)
+            feed = try? await APIClient().getRSSFeed(for: .nineToFiveMac)
         }
     }
 

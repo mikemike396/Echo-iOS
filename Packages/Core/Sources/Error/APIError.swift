@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  APIError.swift
+//
 //
 //  Created by Michael Kushinski on 10/24/23.
 //
