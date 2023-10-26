@@ -9,16 +9,13 @@ import SwiftData
 
 @Model
 final public class RSSFeedItem {
-    public let title: String?
-    @Attribute(.unique) public let link: String?
-    public let publishedDate: Date?
+    public var title: String?
+    @Attribute(.unique) public var link: String?
+    public var publishedDate: Date?
+    public var hasRead: Bool = false
     @Relationship(deleteRule: .noAction, inverse: \RSSFeed.items) public var feed: RSSFeed?
 
-    public init(title: String?, link: String?, publishedDate: Date?) {
-        self.title = title
-        self.link = link
-        self.publishedDate = publishedDate
-    }
+    public init() {}
 }
 
 // MARK: - Extensions

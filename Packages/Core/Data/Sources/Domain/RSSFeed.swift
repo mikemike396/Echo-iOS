@@ -15,9 +15,5 @@ final public class RSSFeed {
     public var imageURL: URL?
     @Relationship(deleteRule: .cascade) public var items: [RSSFeedItem] = []
 
-    public init(title: String?, link: String?, imageURL: URL?) {
-        self.title = title
-        self.link = link
-        self.imageURL = imageURL
-    }
+    public init() {}
 }

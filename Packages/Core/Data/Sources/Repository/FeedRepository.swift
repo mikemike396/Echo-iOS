@@ -18,8 +18,12 @@ public class FeedRepository {
         self.api = api
     }
 
-    public func fetchFeed(url: URL?) async throws {
+    public func syncFeed(url: URL?) async throws {
         let feed = try await api.getRSSFeed(for: url)
+
+        let predicate = #Predicate<RSSFeed> { $0.link == url?.absoluteString }
+        let fetchFeed = FetchDescriptor(predicate: predicate)
+        let newFeed = (try? context.fetch(fetchFeed))?.first ?? RSSFeed()
 
         var imageString = ""
         if let imageLink = feed?.image?.url {
@@ -28,13 +32,28 @@ public class FeedRepository {
             imageString = "\(feed?.link ?? "")/favicon.ico"
         }
         let imageURL = URL(string: imageString)
-        let items = feed?.items?.compactMap { item in
-            RSSFeedItem(title: item.title, link: item.link, publishedDate: item.pubDate)
-        } ?? []
 
-        let newFeed = RSSFeed(title: feed?.title, link: feed?.link, imageURL: imageURL)
-        newFeed.items = items
-        
+        let items = feed?.items?.compactMap { item in
+            let newFeedItem = newFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
+            newFeedItem.title = item.title
+            newFeedItem.publishedDate = item.pubDate
+            return newFeedItem
+        }
+
+        newFeed.title = feed?.title
+        newFeed.link = url?.absoluteString
+        newFeed.imageURL = imageURL
+        newFeed.items = items ?? []
+
         context.insert(newFeed)
+    }
+
+    public func setItemRead(link: String) throws {
+        var descriptor = FetchDescriptor<RSSFeedItem>()
+        descriptor.predicate = #Predicate<RSSFeedItem> { item in
+            item.link == link
+        }
+        let result = (try? context.fetch(descriptor))?.first
+        result?.hasRead = true
     }
 }

@@ -11,7 +11,7 @@ import SwiftUI
 import Utilities
 
 private extension URL {
-    static let nineToFiveMac = URL(string: "https://9to5mac.com/feed/")
+    static let nineToFiveMac = URL(string: "https://9to5mac.com/feed")
     static let macRumors = URL(string: "https://feeds.macrumors.com/MacRumors-All")
 }
 
@@ -48,8 +48,8 @@ public struct FeedScreen: View {
         }
         .navigationTitle("Feed")
         .task {
-            try? await feedRepo.fetchFeed(url: .nineToFiveMac)
-            try? await feedRepo.fetchFeed(url: .macRumors)
+            try? await feedRepo.syncFeed(url: .nineToFiveMac)
+            try? await feedRepo.syncFeed(url: .macRumors)
         }
     }
 
@@ -63,7 +63,7 @@ public struct FeedScreen: View {
 
             Text(item.title ?? "")
                 .font(.body)
-                .foregroundStyle(.primary)
+                .foregroundStyle(item.hasRead ? .secondary : .primary)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .multilineTextAlignment(.leading)
                 .lineLimit(3)
@@ -83,6 +83,8 @@ public struct FeedScreen: View {
             let url = URL(string: string)
         else { return }
 
+        try? feedRepo.setItemRead(link: string)
+
         let vc = SFSafariViewController(url: url)
         UIApplication.shared.firstKeyWindow?.rootViewController?.present(vc, animated: true)
     }
@@ -98,4 +100,6 @@ public struct FeedScreen: View {
 
 #Preview {
     FeedScreen()
+        .modelContainer(for: RSSFeed.self, inMemory: false)
+        .modelContainer(for: RSSFeedItem.self, inMemory: false)
 }
