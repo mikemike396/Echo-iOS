@@ -15,6 +15,7 @@
 		6412841E2AE821420094A199 /* EchoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6412841D2AE821420094A199 /* EchoUITestsLaunchTests.swift */; };
 		6442B31D2AE9489700ED892B /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 6442B31C2AE9489700ED892B /* Localizable.xcstrings */; };
 		644B076A2AEAC00200818A10 /* Feed in Frameworks */ = {isa = PBXBuildFile; productRef = 644B07692AEAC00200818A10 /* Feed */; };
+		64C6B9122AEAF01700BF6917 /* Feed in Frameworks */ = {isa = PBXBuildFile; productRef = 64C6B9112AEAF01700BF6917 /* Feed */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				64C6B9122AEAF01700BF6917 /* Feed in Frameworks */,
 				644B076A2AEAC00200818A10 /* Feed in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -179,6 +181,7 @@
 			name = Echo;
 			packageProductDependencies = (
 				644B07692AEAC00200818A10 /* Feed */,
+				64C6B9112AEAF01700BF6917 /* Feed */,
 			);
 			productName = Echo;
 			productReference = 641283FB2AE821410094A199 /* Echo.app */;
@@ -253,7 +256,7 @@
 			);
 			mainGroup = 641283F22AE821410094A199;
 			packageReferences = (
-				644B07682AEAC00200818A10 /* XCLocalSwiftPackageReference "Packages/Features/Feed" */,
+				64C6B9102AEAF01700BF6917 /* XCLocalSwiftPackageReference "Packages/Features/Feed" */,
 			);
 			productRefGroup = 641283FC2AE821410094A199 /* Products */;
 			projectDirPath = "";
@@ -624,7 +627,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		644B07682AEAC00200818A10 /* XCLocalSwiftPackageReference "Packages/Features/Feed" */ = {
+		64C6B9102AEAF01700BF6917 /* XCLocalSwiftPackageReference "Packages/Features/Feed" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/Features/Feed;
 		};
@@ -632,6 +635,10 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		644B07692AEAC00200818A10 /* Feed */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Feed;
+		};
+		64C6B9112AEAF01700BF6917 /* Feed */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Feed;
 		};

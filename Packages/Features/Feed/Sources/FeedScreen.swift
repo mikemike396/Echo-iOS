@@ -11,11 +11,6 @@ import SwiftData
 import SwiftUI
 import Utilities
 
-private extension URL {
-    static let nineToFiveMac = URL(string: "https://9to5mac.com/feed")
-    static let macRumors = URL(string: "https://feeds.macrumors.com/MacRumors-All")
-}
-
 public struct FeedScreen: View {
     // MARK: Environment
 
@@ -31,11 +26,6 @@ public struct FeedScreen: View {
 
     public init(feedRepo: FeedRepository = FeedRepository()) {
         self.feedRepo = feedRepo
-
-        Task {
-            try? await feedRepo.syncFeed(url: .nineToFiveMac)
-            try? await feedRepo.syncFeed(url: .macRumors)
-        }
     }
 
     public var body: some View {
@@ -52,6 +42,9 @@ public struct FeedScreen: View {
                 .listRowSeparator(.visible)
             }
             .listStyle(.plain)
+            .refreshable {
+                try? await feedRepo.syncFeed()
+            }
         }
         .navigationTitle("Feed")
     }
@@ -109,6 +102,6 @@ public struct FeedScreen: View {
 
 #Preview {
     FeedScreen()
-        .modelContainer(for: RSSFeed.self, inMemory: false)
-        .modelContainer(for: RSSFeedItem.self, inMemory: false)
+        .modelContainer(for: RSSFeed.self, inMemory: true)
+        .modelContainer(for: RSSFeedItem.self, inMemory: true)
 }

@@ -10,6 +10,11 @@ import Networking
 import SwiftData
 import SwiftSoup
 
+private extension URL {
+    static let nineToFiveMac = URL(string: "https://9to5mac.com/feed")
+    static let macRumors = URL(string: "https://feeds.macrumors.com/MacRumors-All")
+}
+
 public class FeedRepository {
     private let context: ModelContext
     private let api: APIInterface
@@ -19,36 +24,39 @@ public class FeedRepository {
         self.api = api
     }
 
-    public func syncFeed(url: URL?) async throws {
-        let feed = try await api.getRSSFeed(for: url)
+    public func syncFeed() async throws {
+        let urls: [URL?] = [.nineToFiveMac, .macRumors]
+        for url in urls {
+            let feed = try await api.getRSSFeed(for: url)
 
-        let predicate = #Predicate<RSSFeed> { $0.link == url?.absoluteString }
-        let fetchFeed = FetchDescriptor(predicate: predicate)
-        let newFeed = (try? context.fetch(fetchFeed))?.first ?? RSSFeed()
+            let predicate = #Predicate<RSSFeed> { $0.link == url?.absoluteString }
+            let fetchFeed = FetchDescriptor(predicate: predicate)
+            let newFeed = (try? context.fetch(fetchFeed))?.first ?? RSSFeed()
 
-        var feedImageString = ""
-        if let imageLink = feed?.image?.url {
-            feedImageString = imageLink
-        } else {
-            feedImageString = "\(feed?.link ?? "")/favicon.ico"
+            var feedImageString = ""
+            if let imageLink = feed?.image?.url {
+                feedImageString = imageLink
+            } else {
+                feedImageString = "\(feed?.link ?? "")/favicon.ico"
+            }
+            let feedImageURL = URL(string: feedImageString)
+
+            let items = feed?.items?.compactMap { item in
+                let newFeedItem = newFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
+                newFeedItem.title = item.title
+                newFeedItem.publishedDate = item.pubDate
+                newFeedItem.link = item.link
+                newFeedItem.imageURL = try? findImageURLForDescriptionHTML(item.description)
+                return newFeedItem
+            }
+
+            newFeed.title = feed?.title
+            newFeed.link = url?.absoluteString
+            newFeed.imageURL = feedImageURL
+            newFeed.items = items ?? []
+
+            context.insert(newFeed)
         }
-        let feedImageURL = URL(string: feedImageString)
-
-        let items = feed?.items?.compactMap { item in
-            let newFeedItem = newFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
-            newFeedItem.title = item.title
-            newFeedItem.publishedDate = item.pubDate
-            newFeedItem.link = item.link
-            newFeedItem.imageURL = try? findImageURLForDescriptionHTML(item.description)
-            return newFeedItem
-        }
-
-        newFeed.title = feed?.title
-        newFeed.link = url?.absoluteString
-        newFeed.imageURL = feedImageURL
-        newFeed.items = items ?? []
-
-        context.insert(newFeed)
     }
 
     public func setItemRead(link: String) throws {
