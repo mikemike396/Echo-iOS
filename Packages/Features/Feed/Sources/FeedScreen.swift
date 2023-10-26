@@ -6,6 +6,7 @@
 
 import Data
 import SafariServices
+import SDWebImageSwiftUI
 import SwiftData
 import SwiftUI
 import Utilities
@@ -30,6 +31,11 @@ public struct FeedScreen: View {
 
     public init(feedRepo: FeedRepository = FeedRepository()) {
         self.feedRepo = feedRepo
+
+        Task {
+            try? await feedRepo.syncFeed(url: .nineToFiveMac)
+            try? await feedRepo.syncFeed(url: .macRumors)
+        }
     }
 
     public var body: some View {
@@ -47,26 +53,23 @@ public struct FeedScreen: View {
             .listStyle(.plain)
         }
         .navigationTitle("Feed")
-        .task {
-            try? await feedRepo.syncFeed(url: .nineToFiveMac)
-            try? await feedRepo.syncFeed(url: .macRumors)
-        }
     }
 
     private func cell(item: RSSFeedItem) -> some View {
         HStack(alignment: .top, spacing: 0) {
-            AsyncImage(url: item.feed?.imageURL) { image in
-                image.image?.resizable()
-            }
-            .frame(width: 23, height: 23)
-            .padding(.trailing, 12)
+            WebImage(url: item.imageURL)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 100, height: 100)
+                .clipped()
+                .cornerRadius(20)
+                .padding(.trailing, 12)
 
             Text(item.title ?? "")
                 .font(.body)
                 .foregroundStyle(item.hasRead ? .secondary : .primary)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .multilineTextAlignment(.leading)
-                .lineLimit(3)
 
             Text(formattedPublishedDate(item.publishedDate) ?? "")
                 .font(.footnote)

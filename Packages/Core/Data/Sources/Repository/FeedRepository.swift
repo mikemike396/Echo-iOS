@@ -8,6 +8,7 @@
 import Foundation
 import Networking
 import SwiftData
+import SwiftSoup
 
 public class FeedRepository {
     private let context: ModelContext
@@ -25,24 +26,26 @@ public class FeedRepository {
         let fetchFeed = FetchDescriptor(predicate: predicate)
         let newFeed = (try? context.fetch(fetchFeed))?.first ?? RSSFeed()
 
-        var imageString = ""
+        var feedImageString = ""
         if let imageLink = feed?.image?.url {
-            imageString = imageLink
+            feedImageString = imageLink
         } else {
-            imageString = "\(feed?.link ?? "")/favicon.ico"
+            feedImageString = "\(feed?.link ?? "")/favicon.ico"
         }
-        let imageURL = URL(string: imageString)
+        let feedImageURL = URL(string: feedImageString)
 
         let items = feed?.items?.compactMap { item in
             let newFeedItem = newFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
             newFeedItem.title = item.title
             newFeedItem.publishedDate = item.pubDate
+            newFeedItem.link = item.link
+            newFeedItem.imageURL = try? findImageURLForDescriptionHTML(item.description)
             return newFeedItem
         }
 
         newFeed.title = feed?.title
         newFeed.link = url?.absoluteString
-        newFeed.imageURL = imageURL
+        newFeed.imageURL = feedImageURL
         newFeed.items = items ?? []
 
         context.insert(newFeed)
@@ -55,5 +58,14 @@ public class FeedRepository {
         }
         let result = (try? context.fetch(descriptor))?.first
         result?.hasRead = true
+    }
+
+    private func findImageURLForDescriptionHTML(_ html: String?) throws -> URL? {
+        guard let html else { return nil }
+
+        let document = try SwiftSoup.parse(html)
+        let srcs = try document.select("img[src]")
+        let array = srcs.array().compactMap { try? $0.attr("src").description }
+        return URL(string: array.first ?? "")
     }
 }

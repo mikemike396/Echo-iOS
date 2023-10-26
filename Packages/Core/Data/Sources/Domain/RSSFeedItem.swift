@@ -13,6 +13,7 @@ final public class RSSFeedItem {
     @Attribute(.unique) public var link: String?
     public var publishedDate: Date?
     public var hasRead: Bool = false
+    public var imageURL: URL?
     @Relationship(deleteRule: .noAction, inverse: \RSSFeed.items) public var feed: RSSFeed?
 
     public init() {}

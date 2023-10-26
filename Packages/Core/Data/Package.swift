@@ -13,6 +13,7 @@ let package = Package(
             targets: ["Data"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/scinfu/SwiftSoup", exact: "2.6.1"),
         .package(path: "../Networking"),
     ],
     targets: [
@@ -20,7 +21,7 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "Data",
-            dependencies: ["Networking"]),
+            dependencies: ["SwiftSoup", "Networking"]),
         .testTarget(
             name: "DataTests",
             dependencies: ["Data"]),

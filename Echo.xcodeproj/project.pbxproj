@@ -14,7 +14,7 @@
 		6412841C2AE821420094A199 /* EchoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6412841B2AE821420094A199 /* EchoUITests.swift */; };
 		6412841E2AE821420094A199 /* EchoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6412841D2AE821420094A199 /* EchoUITestsLaunchTests.swift */; };
 		6442B31D2AE9489700ED892B /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 6442B31C2AE9489700ED892B /* Localizable.xcstrings */; };
-		6442B3232AE9688E00ED892B /* Feed in Frameworks */ = {isa = PBXBuildFile; productRef = 6442B3222AE9688E00ED892B /* Feed */; };
+		644B076A2AEAC00200818A10 /* Feed in Frameworks */ = {isa = PBXBuildFile; productRef = 644B07692AEAC00200818A10 /* Feed */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,7 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6442B3232AE9688E00ED892B /* Feed in Frameworks */,
+				644B076A2AEAC00200818A10 /* Feed in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,7 +178,7 @@
 			);
 			name = Echo;
 			packageProductDependencies = (
-				6442B3222AE9688E00ED892B /* Feed */,
+				644B07692AEAC00200818A10 /* Feed */,
 			);
 			productName = Echo;
 			productReference = 641283FB2AE821410094A199 /* Echo.app */;
@@ -253,7 +253,7 @@
 			);
 			mainGroup = 641283F22AE821410094A199;
 			packageReferences = (
-				6442B3212AE9688E00ED892B /* XCLocalSwiftPackageReference "Packages/Features/Feed" */,
+				644B07682AEAC00200818A10 /* XCLocalSwiftPackageReference "Packages/Features/Feed" */,
 			);
 			productRefGroup = 641283FC2AE821410094A199 /* Products */;
 			projectDirPath = "";
@@ -624,14 +624,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		6442B3212AE9688E00ED892B /* XCLocalSwiftPackageReference "Packages/Features/Feed" */ = {
+		644B07682AEAC00200818A10 /* XCLocalSwiftPackageReference "Packages/Features/Feed" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/Features/Feed;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		6442B3222AE9688E00ED892B /* Feed */ = {
+		644B07692AEAC00200818A10 /* Feed */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Feed;
 		};
