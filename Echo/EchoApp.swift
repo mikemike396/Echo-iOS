@@ -7,6 +7,7 @@
 
 import Data
 import Feed
+import SDWebImage
 import SwiftData
 import SwiftUI
 
@@ -23,6 +24,11 @@ struct EchoApp: App {
     init() {
         container = EchoModelContainer.shared.modelContainer
         print("App Directory Path: \(NSHomeDirectory())")
+
+        // Never expires based on time
+        SDImageCache.shared.config.maxDiskAge = -1
+        // Expire after 500 MB
+        SDImageCache.shared.config.maxDiskSize = 1000 * 1000 * 500
     }
 
     var body: some Scene {

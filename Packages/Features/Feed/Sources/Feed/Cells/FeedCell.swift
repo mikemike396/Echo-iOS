@@ -16,6 +16,10 @@ struct FeedCell: View {
         VStack(spacing: 0) {
             HStack(alignment: .top, spacing: 12) {
                 WebImage(url: item.imageURL)
+                    .placeholder {
+                        Rectangle()
+                            .fill(.separator)
+                    }
                     .resizable()
                     .scaledToFill()
                     .frame(width: 100, height: 100)
