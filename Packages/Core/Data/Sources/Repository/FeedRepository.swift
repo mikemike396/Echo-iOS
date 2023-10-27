@@ -39,8 +39,14 @@ public actor FeedRepository: ModelActor {
                 newFeedItem.publishedDate = item.pubDate
                 newFeedItem.link = item.link
 
+                // Attempt to get image via MediaContents
                 var mediaURL = item.media?.mediaContents?.first?.attributes?.url
                 if mediaURL == nil {
+                    // Attempt to get image via Enclosure
+                    mediaURL = item.enclosure?.attributes?.url
+                }
+                if mediaURL == nil {
+                    // Attempt to get image via Description
                     mediaURL = try? getFeedItemImageURLForDescriptionHTML(item.description)?.absoluteString
                 }
                 newFeedItem.imageURL = URL(string: mediaURL ?? "")
