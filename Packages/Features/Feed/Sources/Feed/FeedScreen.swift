@@ -58,6 +58,11 @@ public struct FeedScreen: View {
                 Image(systemName: "plus")
             }
         }
+        .onAppear {
+            if items.count == 0 {
+                addFeedPresented = true
+            }
+        }
         .sheet(isPresented: $addFeedPresented) {
             NavigationStack {
                 AddFeedScreen()

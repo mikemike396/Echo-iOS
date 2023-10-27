@@ -40,7 +40,7 @@ public actor FeedRepository: ModelActor {
             rssFeed.title = feed?.title
             rssFeed.imageURL = feedImageURL
 
-            let items = feed?.items?.compactMap { item in
+            let items = feed?.items?.map { item in
                 let newFeedItem = rssFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
                 newFeedItem.title = item.title
                 newFeedItem.publishedDate = item.pubDate
