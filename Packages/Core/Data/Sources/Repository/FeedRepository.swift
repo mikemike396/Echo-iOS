@@ -10,11 +10,6 @@ import Networking
 import SwiftData
 import SwiftSoup
 
-private extension URL {
-    static let nineToFiveMac = URL(string: "https://9to5mac.com/feed")
-    static let macRumors = URL(string: "https://feeds.macrumors.com/MacRumors-All")
-}
-
 public actor FeedRepository: ModelActor {
     public let modelContainer: ModelContainer
     public let modelExecutor: any ModelExecutor
@@ -28,13 +23,11 @@ public actor FeedRepository: ModelActor {
     }
 
     public func syncFeed() async throws {
-        let urls: [URL?] = [.nineToFiveMac, .macRumors]
-        for url in urls {
-            let feed = try await api.getRSSFeed(for: url)
+        let fetchRSSFeeds = FetchDescriptor<RSSFeed>()
+        let rssFeeds = try? modelExecutor.modelContext.fetch(fetchRSSFeeds)
 
-            let predicate = #Predicate<RSSFeed> { $0.link == url?.absoluteString }
-            let fetchFeed = FetchDescriptor(predicate: predicate)
-            let newFeed = (try? modelExecutor.modelContext.fetch(fetchFeed))?.first ?? RSSFeed()
+        for rssFeed in rssFeeds ?? [] {
+            let feed = try await api.getRSSFeed(for: URL(string: rssFeed.link ?? ""))
 
             var feedImageString = ""
             if let imageLink = feed?.image?.url {
@@ -44,12 +37,11 @@ public actor FeedRepository: ModelActor {
             }
             let feedImageURL = URL(string: feedImageString)
 
-            newFeed.title = feed?.title
-            newFeed.link = url?.absoluteString
-            newFeed.imageURL = feedImageURL
+            rssFeed.title = feed?.title
+            rssFeed.imageURL = feedImageURL
 
             let items = feed?.items?.compactMap { item in
-                let newFeedItem = newFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
+                let newFeedItem = rssFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
                 newFeedItem.title = item.title
                 newFeedItem.publishedDate = item.pubDate
                 newFeedItem.link = item.link
@@ -57,9 +49,9 @@ public actor FeedRepository: ModelActor {
                 return newFeedItem
             }
 
-            newFeed.items = items ?? []
+            rssFeed.items = items ?? []
 
-            modelExecutor.modelContext.insert(newFeed)
+            modelExecutor.modelContext.insert(rssFeed)
         }
     }
 
@@ -70,6 +62,28 @@ public actor FeedRepository: ModelActor {
         }
         let result = (try? modelExecutor.modelContext.fetch(descriptor))?.first
         result?.hasRead = true
+    }
+
+    public func addFeed(link: String?) throws {
+        let predicate = #Predicate<RSSFeed> { $0.link == link }
+        let fetchFeed = FetchDescriptor(predicate: predicate)
+        let newFeed = (try? modelExecutor.modelContext.fetch(fetchFeed))?.first ?? RSSFeed()
+
+        newFeed.link = link
+        newFeed.addDate = .now
+        newFeed.title = link
+
+        modelExecutor.modelContext.insert(newFeed)
+    }
+
+    public func deleteFeed(link: String?) throws {
+        var descriptor = FetchDescriptor<RSSFeed>()
+        descriptor.predicate = #Predicate<RSSFeed> { item in
+            item.link == link
+        }
+        if let result = (try? modelExecutor.modelContext.fetch(descriptor))?.first {
+            modelExecutor.modelContext.delete(result)
+        }
     }
 
     private func getImageURLForDescriptionHTML(_ html: String?) throws -> URL? {

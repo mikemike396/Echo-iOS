@@ -13,6 +13,7 @@ final public class RSSFeed {
     public var title: String?
     @Attribute(.unique) public var link: String?
     public var imageURL: URL?
+    public var addDate: Date?
     @Relationship(deleteRule: .cascade) public var items: [RSSFeedItem] = []
 
     public init() {}

@@ -19,14 +19,15 @@ public struct FeedScreen: View {
 
     // MARK: Initialization
 
-    let feedRepo: FeedRepository
+    private let feedRepo: FeedRepository
 
     // MARK: SwiftData
 
-    @Query(sort: \RSSFeedItem.publishedDate, order: .reverse) private var items: [RSSFeedItem]
+    @Query(sort: \RSSFeedItem.publishedDate, order: .reverse, animation: .default) private var items: [RSSFeedItem]
 
     // MARK: State Variables
-    @State var addFeedPresented = false
+
+    @State private var addFeedPresented = false
 
     public init(feedRepo: FeedRepository = FeedRepository()) {
         self.feedRepo = feedRepo
@@ -58,7 +59,9 @@ public struct FeedScreen: View {
             }
         }
         .sheet(isPresented: $addFeedPresented) {
-            AddFeedScreen()
+            NavigationStack {
+                AddFeedScreen()
+            }
         }
         .navigationTitle("Feed")
     }
