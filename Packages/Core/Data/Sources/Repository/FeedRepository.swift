@@ -15,12 +15,15 @@ private extension URL {
     static let macRumors = URL(string: "https://feeds.macrumors.com/MacRumors-All")
 }
 
-public class FeedRepository {
-    private let context: ModelContext
+public actor FeedRepository: ModelActor {
+    public let modelContainer: ModelContainer
+    public let modelExecutor: any ModelExecutor
     private let api: APIInterface
 
     public init(container: ModelContainer = EchoModelContainer.shared.modelContainer, api: APIInterface = APIClient()) {
-        self.context = ModelContext(container)
+        self.modelContainer = container
+        let context = ModelContext(container)
+        self.modelExecutor = DefaultSerialModelExecutor(modelContext: context)
         self.api = api
     }
 
@@ -31,7 +34,7 @@ public class FeedRepository {
 
             let predicate = #Predicate<RSSFeed> { $0.link == url?.absoluteString }
             let fetchFeed = FetchDescriptor(predicate: predicate)
-            let newFeed = (try? context.fetch(fetchFeed))?.first ?? RSSFeed()
+            let newFeed = (try? modelExecutor.modelContext.fetch(fetchFeed))?.first ?? RSSFeed()
 
             var feedImageString = ""
             if let imageLink = feed?.image?.url {
@@ -41,21 +44,22 @@ public class FeedRepository {
             }
             let feedImageURL = URL(string: feedImageString)
 
+            newFeed.title = feed?.title
+            newFeed.link = url?.absoluteString
+            newFeed.imageURL = feedImageURL
+
             let items = feed?.items?.compactMap { item in
                 let newFeedItem = newFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
                 newFeedItem.title = item.title
                 newFeedItem.publishedDate = item.pubDate
                 newFeedItem.link = item.link
-                newFeedItem.imageURL = try? findImageURLForDescriptionHTML(item.description)
+                newFeedItem.imageURL = try? getImageURLForDescriptionHTML(item.description)
                 return newFeedItem
             }
 
-            newFeed.title = feed?.title
-            newFeed.link = url?.absoluteString
-            newFeed.imageURL = feedImageURL
             newFeed.items = items ?? []
 
-            context.insert(newFeed)
+            modelExecutor.modelContext.insert(newFeed)
         }
     }
 
@@ -64,11 +68,11 @@ public class FeedRepository {
         descriptor.predicate = #Predicate<RSSFeedItem> { item in
             item.link == link
         }
-        let result = (try? context.fetch(descriptor))?.first
+        let result = (try? modelExecutor.modelContext.fetch(descriptor))?.first
         result?.hasRead = true
     }
 
-    private func findImageURLForDescriptionHTML(_ html: String?) throws -> URL? {
+    private func getImageURLForDescriptionHTML(_ html: String?) throws -> URL? {
         guard let html else { return nil }
 
         let document = try SwiftSoup.parse(html)
