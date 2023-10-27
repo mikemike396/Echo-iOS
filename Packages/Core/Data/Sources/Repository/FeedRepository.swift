@@ -21,40 +21,40 @@ public actor FeedRepository: ModelActor {
         self.modelExecutor = DefaultSerialModelExecutor(modelContext: context)
         self.api = api
     }
-
+    
+    /// Calls `getRSSFeed()` to fetch the latest for each `RSSFeed`
     public func syncFeed() async throws {
         let fetchRSSFeeds = FetchDescriptor<RSSFeed>()
         let rssFeeds = try? modelExecutor.modelContext.fetch(fetchRSSFeeds)
 
         for rssFeed in rssFeeds ?? [] {
-            let feed = try await api.getRSSFeed(for: URL(string: rssFeed.link ?? ""))
+            let feedResponse = try await api.getRSSFeed(for: URL(string: rssFeed.link ?? ""))
 
-            var feedImageString = ""
-            if let imageLink = feed?.image?.url {
-                feedImageString = imageLink
-            } else {
-                feedImageString = "\(feed?.link ?? "")/favicon.ico"
-            }
-            let feedImageURL = URL(string: feedImageString)
+            rssFeed.title = feedResponse?.title
+            rssFeed.imageURL = getFeedIconURL(for: feedResponse?.image?.url, and: feedResponse?.link)
 
-            rssFeed.title = feed?.title
-            rssFeed.imageURL = feedImageURL
-
-            let items = feed?.items?.map { item in
+            let items = feedResponse?.items?.map { item in
                 let newFeedItem = rssFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
                 newFeedItem.title = item.title
                 newFeedItem.publishedDate = item.pubDate
                 newFeedItem.link = item.link
-                newFeedItem.imageURL = try? getImageURLForDescriptionHTML(item.description)
+
+                var mediaURL = item.media?.mediaContents?.first?.attributes?.url
+                if mediaURL == nil {
+                    mediaURL = try? getFeedItemImageURLForDescriptionHTML(item.description)?.absoluteString
+                }
+                newFeedItem.imageURL = URL(string: mediaURL ?? "")
                 return newFeedItem
             }
 
-            rssFeed.items = items ?? []
+            rssFeed.items.append(contentsOf: items ?? [])
 
             modelExecutor.modelContext.insert(rssFeed)
         }
     }
-
+    
+    /// Sets the `hasRead` field to true for the provided `RSSFeed` link
+    /// - Parameter link: String value for the `RSSFeed` link
     public func setItemRead(link: String) throws {
         var descriptor = FetchDescriptor<RSSFeedItem>()
         descriptor.predicate = #Predicate<RSSFeedItem> { item in
@@ -64,6 +64,8 @@ public actor FeedRepository: ModelActor {
         result?.hasRead = true
     }
 
+    /// Adds a new `RSSFeed` item for the provided link
+    /// - Parameter link: String value for the `RSSFeed` link
     public func addFeed(link: String?) throws {
         let predicate = #Predicate<RSSFeed> { $0.link == link }
         let fetchFeed = FetchDescriptor(predicate: predicate)
@@ -76,6 +78,8 @@ public actor FeedRepository: ModelActor {
         modelExecutor.modelContext.insert(newFeed)
     }
 
+    /// Removes `RSSFeed` and associated items for the provided link
+    /// - Parameter link: String value for the `RSSFeed` link
     public func deleteFeed(link: String?) throws {
         var descriptor = FetchDescriptor<RSSFeed>()
         descriptor.predicate = #Predicate<RSSFeed> { item in
@@ -85,13 +89,27 @@ public actor FeedRepository: ModelActor {
             modelExecutor.modelContext.delete(result)
         }
     }
+}
 
-    private func getImageURLForDescriptionHTML(_ html: String?) throws -> URL? {
+// MARK: Private Functions
+
+extension FeedRepository {
+    private func getFeedItemImageURLForDescriptionHTML(_ html: String?) throws -> URL? {
         guard let html else { return nil }
 
         let document = try SwiftSoup.parse(html)
         let srcs = try document.select("img[src]")
         let array = srcs.array().compactMap { try? $0.attr("src").description }
         return URL(string: array.first ?? "")
+    }
+
+    private func getFeedIconURL(for imageURL: String?, and link: String?) -> URL? {
+        var imageString = ""
+        if let imageURL {
+            imageString = imageURL
+        } else {
+            imageString = "\(link ?? "")/favicon.ico"
+        }
+        return URL(string: imageString)
     }
 }
