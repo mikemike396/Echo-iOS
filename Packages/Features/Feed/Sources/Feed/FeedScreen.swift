@@ -46,11 +46,22 @@ public struct FeedScreen: View {
                 try? await feedRepo.syncFeed()
             }
         }
+        .toolbar {
+            Button {
+
+            } label: {
+                Image(systemName: "plus")
+            }
+        }
         .navigationTitle("Feed")
     }
+}
 
+// MARK: Private Functions
+
+extension FeedScreen {
     private func navigateToLink(_ string: String?) {
-        guard 
+        guard
             let string,
             let url = URL(string: string)
         else { return }

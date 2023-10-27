@@ -9,14 +9,10 @@ import Data
 import SDWebImageSwiftUI
 import SwiftUI
 
-public struct FeedCell: View {
+struct FeedCell: View {
     let item: RSSFeedItem
 
-    public init(item: RSSFeedItem) {
-        self.item = item
-    }
-
-    public var body: some View {
+    var body: some View {
         VStack(spacing: 0) {
             HStack(alignment: .top, spacing: 12) {
                 WebImage(url: item.imageURL)
@@ -45,8 +41,11 @@ public struct FeedCell: View {
             }
         }
     }
+}
 
+// MARK: Private Functions
 
+extension FeedCell {
     private func formattedPublishedDate(_ date: Date?) -> String? {
         guard let date else { return nil }
 

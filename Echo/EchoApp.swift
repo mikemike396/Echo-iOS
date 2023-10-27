@@ -13,9 +13,15 @@ import SwiftUI
 @main
 struct EchoApp: App {
     @Environment(\.scenePhase) var scenePhase
+
+    // MARK: Initialized Variables
+
+    let container: ModelContainer
+
     let feedRepository = FeedRepository()
 
     init() {
+        container = EchoModelContainer.shared.modelContainer
         print("App Directory Path: \(NSHomeDirectory())")
     }
 
@@ -35,6 +41,6 @@ struct EchoApp: App {
                 break
             }
         }
-        .modelContainer(EchoModelContainer.shared.modelContainer)
+        .modelContainer(container)
     }
 }
