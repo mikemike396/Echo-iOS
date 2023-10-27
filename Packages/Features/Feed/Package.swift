@@ -16,6 +16,7 @@ let package = Package(
     dependencies: [
         .package(path: "../Core/Data"),
         .package(path: "../Core/Utilities"),
+        .package(path: "AddFeed"),
         .package(url: "https://github.com/SDWebImage/SDWebImageSwiftUI", exact: "2.2.3"),
     ],
     targets: [
@@ -23,7 +24,7 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "Feed",
-            dependencies: ["Data", "Utilities", "SDWebImageSwiftUI"]),
+            dependencies: ["Data", "Utilities", "AddFeed", "SDWebImageSwiftUI"]),
         .testTarget(
             name: "FeedTests",
             dependencies: ["Feed"]),

@@ -4,6 +4,7 @@
 //  Created by Michael Kushinski on 10/24/23.
 //
 
+import AddFeed
 import Data
 import SafariServices
 import SDWebImageSwiftUI
@@ -23,6 +24,9 @@ public struct FeedScreen: View {
     // MARK: SwiftData
 
     @Query(sort: \RSSFeedItem.publishedDate, order: .reverse) private var items: [RSSFeedItem]
+
+    // MARK: State Variables
+    @State var addFeedPresented = false
 
     public init(feedRepo: FeedRepository = FeedRepository()) {
         self.feedRepo = feedRepo
@@ -48,10 +52,13 @@ public struct FeedScreen: View {
         }
         .toolbar {
             Button {
-
+                addFeedPresented = true
             } label: {
                 Image(systemName: "plus")
             }
+        }
+        .sheet(isPresented: $addFeedPresented) {
+            AddFeedScreen()
         }
         .navigationTitle("Feed")
     }

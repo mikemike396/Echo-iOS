@@ -45,6 +45,7 @@
 		641284172AE821420094A199 /* EchoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EchoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6412841B2AE821420094A199 /* EchoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoUITests.swift; sourceTree = "<group>"; };
 		6412841D2AE821420094A199 /* EchoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		641B31A22AEBD5DA00052249 /* AddFeed */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = AddFeed; path = ../../../../../AddFeed; sourceTree = "<group>"; };
 		6434859D2AE8409E008262EC /* Feed */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Feed; sourceTree = "<group>"; };
 		6442B31C2AE9489700ED892B /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		646510EA2AE96928001A524C /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Networking; sourceTree = "<group>"; };
@@ -148,6 +149,7 @@
 		643485A42AE85659008262EC /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				641B31A22AEBD5DA00052249 /* AddFeed */,
 				6434859D2AE8409E008262EC /* Feed */,
 			);
 			path = Features;
