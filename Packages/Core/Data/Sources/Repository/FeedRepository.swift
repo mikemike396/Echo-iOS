@@ -35,6 +35,11 @@ public actor FeedRepository: ModelActor {
 
             let items = feedResponse?.items?.map { item in
                 let newFeedItem = rssFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
+                if newFeedItem.link == nil {
+                    newFeedItem.isNew = true
+                } else {
+                    newFeedItem.isNew = false
+                }
                 newFeedItem.title = item.title?.trimmingCharacters(in: .whitespacesAndNewlines)
                 newFeedItem.publishedDate = item.pubDate
                 newFeedItem.link = item.link?.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -68,6 +73,7 @@ public actor FeedRepository: ModelActor {
         }
         let result = (try? modelExecutor.modelContext.fetch(descriptor))?.first
         result?.hasRead = true
+        result?.isNew = false
     }
 
     /// Adds a new `RSSFeed` item for the provided link

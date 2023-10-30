@@ -25,11 +25,19 @@ struct FeedCell: View {
                     .frame(width: 100, height: 100)
                     .clipped()
                     .cornerRadius(20)
-                Text(item.title ?? "")
-                    .font(.body)
-                    .foregroundStyle(item.hasRead ? .secondary : .primary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .multilineTextAlignment(.leading)
+                HStack(alignment: .top, spacing: 5) {
+                    Text(item.title ?? "")
+                        .font(.body)
+                        .foregroundStyle(item.hasRead ? .secondary : .primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .multilineTextAlignment(.leading)
+                    if item.isNew {
+                        Circle()
+                            .fill(.teal)
+                            .frame(width: 6, height: 6)
+                            .padding(.top, 5)
+                    }
+                }
             }
             HStack(spacing: 5) {
                 Spacer()

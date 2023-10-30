@@ -14,6 +14,7 @@ final public class RSSFeedItem {
     public var publishedDate: Date?
     public var hasRead: Bool = false
     public var imageURL: URL?
+    public var isNew: Bool = false
     @Relationship(deleteRule: .noAction, inverse: \RSSFeed.items) public var feed: RSSFeed?
 
     public init() {}
