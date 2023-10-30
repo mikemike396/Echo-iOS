@@ -30,14 +30,14 @@ public actor FeedRepository: ModelActor {
         for rssFeed in rssFeeds ?? [] {
             let feedResponse = try await api.getRSSFeed(for: URL(string: rssFeed.link ?? ""))
 
-            rssFeed.title = feedResponse?.title
+            rssFeed.title = feedResponse?.title?.trimmingCharacters(in: .whitespacesAndNewlines)
             rssFeed.imageURL = getFeedIconURL(for: feedResponse?.image?.url, and: feedResponse?.link)
 
             let items = feedResponse?.items?.map { item in
                 let newFeedItem = rssFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
-                newFeedItem.title = item.title
+                newFeedItem.title = item.title?.trimmingCharacters(in: .whitespacesAndNewlines)
                 newFeedItem.publishedDate = item.pubDate
-                newFeedItem.link = item.link
+                newFeedItem.link = item.link?.trimmingCharacters(in: .whitespacesAndNewlines)
 
                 // Attempt to get image via MediaContents
                 var mediaURL = item.media?.mediaContents?.first?.attributes?.url
