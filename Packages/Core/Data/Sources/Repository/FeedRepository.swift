@@ -18,6 +18,7 @@ public actor FeedRepository: ModelActor {
     public init(container: ModelContainer = EchoModelContainer.shared.modelContainer, api: APIInterface = APIClient()) {
         self.modelContainer = container
         let context = ModelContext(container)
+        context.autosaveEnabled = false
         self.modelExecutor = DefaultSerialModelExecutor(modelContext: context)
         self.api = api
     }
@@ -28,13 +29,14 @@ public actor FeedRepository: ModelActor {
         let rssFeeds = try? modelExecutor.modelContext.fetch(fetchRSSFeeds)
 
         for rssFeed in rssFeeds ?? [] {
+            let rssFeedItemsSet = Set(rssFeed.items)
             let feedResponse = try await api.getRSSFeed(for: URL(string: rssFeed.link ?? ""))
 
             rssFeed.title = feedResponse?.title?.trimmingCharacters(in: .whitespacesAndNewlines)
             rssFeed.imageURL = getFeedIconURL(for: feedResponse?.image?.url, and: feedResponse?.link)
 
             let items = feedResponse?.items?.map { item in
-                let newFeedItem = rssFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
+                let newFeedItem = rssFeedItemsSet.first(where: { $0.link == item.link }) ?? RSSFeedItem()
                 if newFeedItem.link == nil {
                     newFeedItem.isNew = true
                 } else {
@@ -59,9 +61,13 @@ public actor FeedRepository: ModelActor {
             }
 
             rssFeed.items.append(contentsOf: items ?? [])
+        }
 
+        for rssFeed in rssFeeds ?? [] {
             modelExecutor.modelContext.insert(rssFeed)
         }
+
+        try modelExecutor.modelContext.save()
     }
     
     /// Sets the `hasRead` field to true for the provided `RSSFeed` link
@@ -74,6 +80,7 @@ public actor FeedRepository: ModelActor {
         let result = (try? modelExecutor.modelContext.fetch(descriptor))?.first
         result?.hasRead = true
         result?.isNew = false
+        try modelExecutor.modelContext.save()
     }
 
     /// Adds a new `RSSFeed` item for the provided link
@@ -88,6 +95,7 @@ public actor FeedRepository: ModelActor {
         newFeed.title = link
 
         modelExecutor.modelContext.insert(newFeed)
+        try modelExecutor.modelContext.save()
     }
 
     /// Removes `RSSFeed` and associated items for the provided link
@@ -99,6 +107,7 @@ public actor FeedRepository: ModelActor {
         }
         if let result = (try? modelExecutor.modelContext.fetch(descriptor))?.first {
             modelExecutor.modelContext.delete(result)
+            try modelExecutor.modelContext.save()
         }
     }
 }

@@ -29,6 +29,8 @@ struct EchoApp: App {
         SDImageCache.shared.config.maxDiskAge = -1
         // Expire after 500 MB
         SDImageCache.shared.config.maxDiskSize = 1000 * 1000 * 500
+
+        syncFeeds()
     }
 
     var body: some Scene {
@@ -40,13 +42,17 @@ struct EchoApp: App {
         .onChange(of: scenePhase, initial: false) { oldPhase, newPhase in
             switch newPhase {
             case .active:
-                Task {
-                    try? await feedRepository.syncFeed()
-                }
+                break
             default:
                 break
             }
         }
         .modelContainer(container)
+    }
+
+    private func syncFeeds() {
+        Task(priority: .background) {
+            try? await feedRepository.syncFeed()
+        }
     }
 }

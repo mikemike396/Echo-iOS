@@ -15,13 +15,15 @@ public class APIClient: APIInterface {
         guard let url else { throw APIError.invalidURL }
 
         let parser = FeedParser(URL: url)
-        let result = parser.parse()
-
-        switch result {
-        case .success(let feed):
-            return feed.rssFeed
-        case .failure(let error):
-            throw error
+        return try await withCheckedThrowingContinuation { continuation in
+            parser.parseAsync { result in
+                switch result {
+                case .success(let feed):
+                    continuation.resume(returning: feed.rssFeed)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
         }
     }
 }
