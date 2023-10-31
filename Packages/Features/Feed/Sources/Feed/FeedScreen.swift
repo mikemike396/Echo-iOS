@@ -48,7 +48,7 @@ public struct FeedScreen: View {
             }
             .listStyle(.plain)
             .refreshable {
-                try? await feedRepo.syncFeed()
+                try? await feedRepo.syncFeeds()
             }
         }
         .toolbar {

@@ -19,8 +19,6 @@ struct EchoApp: App {
 
     let container: ModelContainer
 
-    let feedRepository = FeedRepository()
-
     init() {
         container = EchoModelContainer.shared.modelContainer
         print("App Directory Path: \(NSHomeDirectory())")
@@ -51,8 +49,9 @@ struct EchoApp: App {
     }
 
     private func syncFeeds() {
-        Task(priority: .background) {
-            try? await feedRepository.syncFeed()
+        Task.detached {
+            let feedRepository = FeedRepository()
+            try? await feedRepository.syncFeeds()
         }
     }
 }

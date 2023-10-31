@@ -24,52 +24,57 @@ public actor FeedRepository: ModelActor {
     }
     
     /// Calls `getRSSFeed()` to fetch the latest for each `RSSFeed`
-    public func syncFeed() async throws {
+    public func syncFeeds() async throws {
         let fetchRSSFeeds = FetchDescriptor<RSSFeed>()
         let rssFeeds = try? modelExecutor.modelContext.fetch(fetchRSSFeeds)
 
         for rssFeed in rssFeeds ?? [] {
-            let rssFeedItemsSet = Set(rssFeed.items)
-            let feedResponse = try await api.getRSSFeed(for: URL(string: rssFeed.link ?? ""))
-
-            rssFeed.title = feedResponse?.title?.trimmingCharacters(in: .whitespacesAndNewlines)
-            rssFeed.imageURL = getFeedIconURL(for: feedResponse?.image?.url, and: feedResponse?.link)
-
-            let items = feedResponse?.items?.map { item in
-                let newFeedItem = rssFeedItemsSet.first(where: { $0.link == item.link }) ?? RSSFeedItem()
-                if newFeedItem.link == nil {
-                    newFeedItem.isNew = true
-                } else {
-                    newFeedItem.isNew = false
-                }
-                newFeedItem.title = item.title?.trimmingCharacters(in: .whitespacesAndNewlines)
-                newFeedItem.publishedDate = item.pubDate
-                newFeedItem.link = item.link?.trimmingCharacters(in: .whitespacesAndNewlines)
-
-                // Attempt to get image via MediaContents
-                var mediaURL = item.media?.mediaContents?.first?.attributes?.url
-                if mediaURL == nil {
-                    // Attempt to get image via Enclosure
-                    mediaURL = item.enclosure?.attributes?.url
-                }
-                if mediaURL == nil {
-                    // Attempt to get image via Description
-                    mediaURL = try? getFeedItemImageURLForDescriptionHTML(item.description)?.absoluteString
-                }
-                newFeedItem.imageURL = URL(string: mediaURL ?? "")
-                return newFeedItem
+            if let link = rssFeed.link {
+                try await updateFeed(link: link)
             }
+        }
+    }
 
-            rssFeed.items.append(contentsOf: items ?? [])
+    public func updateFeed(link: String) async throws {
+        let predicate = #Predicate<RSSFeed> { $0.link == link }
+        let fetchFeed = FetchDescriptor(predicate: predicate)
+        let newFeed = (try? modelExecutor.modelContext.fetch(fetchFeed))?.first ?? RSSFeed()
+
+        let feedResponse = try await api.getRSSFeed(for: URL(string: link))
+
+        newFeed.title = feedResponse?.title?.trimmingCharacters(in: .whitespacesAndNewlines)
+        newFeed.imageURL = getFeedIconURL(for: feedResponse?.image?.url, and: feedResponse?.link)
+
+        let items = feedResponse?.items?.map { item in
+            let newFeedItem = newFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
+            if newFeedItem.link == nil {
+                newFeedItem.isNew = true
+            } else {
+                newFeedItem.isNew = false
+            }
+            newFeedItem.title = item.title?.trimmingCharacters(in: .whitespacesAndNewlines)
+            newFeedItem.publishedDate = item.pubDate
+            newFeedItem.link = item.link?.trimmingCharacters(in: .whitespacesAndNewlines)
+
+            // Attempt to get image via MediaContents
+            var mediaURL = item.media?.mediaContents?.first?.attributes?.url
+            if mediaURL == nil {
+                // Attempt to get image via Enclosure
+                mediaURL = item.enclosure?.attributes?.url
+            }
+            if mediaURL == nil {
+                // Attempt to get image via Description
+                mediaURL = try? getFeedItemImageURLForDescriptionHTML(item.description)?.absoluteString
+            }
+            newFeedItem.imageURL = URL(string: mediaURL ?? "")
+            return newFeedItem
         }
 
-        for rssFeed in rssFeeds ?? [] {
-            modelExecutor.modelContext.insert(rssFeed)
-        }
-
+        newFeed.items.append(contentsOf: items ?? [])
+        modelExecutor.modelContext.insert(newFeed)
         try modelExecutor.modelContext.save()
     }
-    
+
     /// Sets the `hasRead` field to true for the provided `RSSFeed` link
     /// - Parameter link: String value for the `RSSFeed` link
     public func setItemRead(link: String) throws {
@@ -85,7 +90,7 @@ public actor FeedRepository: ModelActor {
 
     /// Adds a new `RSSFeed` item for the provided link
     /// - Parameter link: String value for the `RSSFeed` link
-    public func addFeed(link: String?) throws {
+    public func addFeed(link: String?) async throws {
         let predicate = #Predicate<RSSFeed> { $0.link == link }
         let fetchFeed = FetchDescriptor(predicate: predicate)
         let newFeed = (try? modelExecutor.modelContext.fetch(fetchFeed))?.first ?? RSSFeed()
@@ -96,6 +101,10 @@ public actor FeedRepository: ModelActor {
 
         modelExecutor.modelContext.insert(newFeed)
         try modelExecutor.modelContext.save()
+
+        if let link {
+            try await updateFeed(link: link)
+        }
     }
 
     /// Removes `RSSFeed` and associated items for the provided link

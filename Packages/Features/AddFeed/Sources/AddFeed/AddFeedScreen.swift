@@ -64,7 +64,6 @@ extension AddFeedScreen {
                     Task {
                         try? await feedRepo.addFeed(link: addFeedText)
                         addFeedText = ""
-                        try? await feedRepo.syncFeed()
                     }
                 }
         }
