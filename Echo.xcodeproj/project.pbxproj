@@ -15,7 +15,7 @@
 		6412841E2AE821420094A199 /* EchoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6412841D2AE821420094A199 /* EchoUITestsLaunchTests.swift */; };
 		6442B31D2AE9489700ED892B /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 6442B31C2AE9489700ED892B /* Localizable.xcstrings */; };
 		644B076A2AEAC00200818A10 /* Feed in Frameworks */ = {isa = PBXBuildFile; productRef = 644B07692AEAC00200818A10 /* Feed */; };
-		64C6B9122AEAF01700BF6917 /* Feed in Frameworks */ = {isa = PBXBuildFile; productRef = 64C6B9112AEAF01700BF6917 /* Feed */; };
+		64F924602AF1709200A9DC6C /* Feed in Frameworks */ = {isa = PBXBuildFile; productRef = 64F9245F2AF1709200A9DC6C /* Feed */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +45,7 @@
 		641284172AE821420094A199 /* EchoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EchoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6412841B2AE821420094A199 /* EchoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoUITests.swift; sourceTree = "<group>"; };
 		6412841D2AE821420094A199 /* EchoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		641B31A22AEBD5DA00052249 /* AddFeed */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = AddFeed; path = ../../../../../AddFeed; sourceTree = "<group>"; };
+		641B31A22AEBD5DA00052249 /* AddFeed */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AddFeed; sourceTree = "<group>"; };
 		6434859D2AE8409E008262EC /* Feed */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Feed; sourceTree = "<group>"; };
 		6442B31C2AE9489700ED892B /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		646510EA2AE96928001A524C /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Networking; sourceTree = "<group>"; };
@@ -58,7 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				64C6B9122AEAF01700BF6917 /* Feed in Frameworks */,
+				64F924602AF1709200A9DC6C /* Feed in Frameworks */,
 				644B076A2AEAC00200818A10 /* Feed in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -183,7 +183,7 @@
 			name = Echo;
 			packageProductDependencies = (
 				644B07692AEAC00200818A10 /* Feed */,
-				64C6B9112AEAF01700BF6917 /* Feed */,
+				64F9245F2AF1709200A9DC6C /* Feed */,
 			);
 			productName = Echo;
 			productReference = 641283FB2AE821410094A199 /* Echo.app */;
@@ -258,7 +258,7 @@
 			);
 			mainGroup = 641283F22AE821410094A199;
 			packageReferences = (
-				64C6B9102AEAF01700BF6917 /* XCLocalSwiftPackageReference "Packages/Features/Feed" */,
+				64F9245E2AF1709200A9DC6C /* XCLocalSwiftPackageReference "Packages/Features/Feed" */,
 			);
 			productRefGroup = 641283FC2AE821410094A199 /* Products */;
 			projectDirPath = "";
@@ -631,7 +631,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		64C6B9102AEAF01700BF6917 /* XCLocalSwiftPackageReference "Packages/Features/Feed" */ = {
+		64F9245E2AF1709200A9DC6C /* XCLocalSwiftPackageReference "Packages/Features/Feed" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/Features/Feed;
 		};
@@ -642,7 +642,7 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Feed;
 		};
-		64C6B9112AEAF01700BF6917 /* Feed */ = {
+		64F9245F2AF1709200A9DC6C /* Feed */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Feed;
 		};
