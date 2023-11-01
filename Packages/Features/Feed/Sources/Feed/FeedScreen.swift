@@ -42,9 +42,7 @@ public struct FeedScreen: View {
                     } label: {
                         FeedCell(item: item)
                     }
-
                 }
-                .listRowSeparator(.visible)
             }
             .listStyle(.plain)
             .refreshable {
@@ -92,6 +90,4 @@ extension FeedScreen {
 
 #Preview {
     FeedScreen()
-        .modelContainer(for: RSSFeed.self, inMemory: true)
-        .modelContainer(for: RSSFeedItem.self, inMemory: true)
 }
