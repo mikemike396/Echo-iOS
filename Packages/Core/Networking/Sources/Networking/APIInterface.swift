@@ -10,4 +10,5 @@ import FeedKit
 
 public protocol APIInterface {
     func getRSSFeed(for url: URL?) async throws -> RSSFeed?
+    func getSearchIndex() async throws -> [SearchIndexItemResponse]?
 }

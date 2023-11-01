@@ -23,6 +23,12 @@ public actor FeedRepository: ModelActor {
         self.api = api
     }
     
+    /// Calls Firebase fetch the latest Search index
+    public func getFeedSearchIndex() async throws {
+        let result = try await api.getSearchIndex()
+        print("test")
+    }
+
     /// Calls `getRSSFeed()` to fetch the latest for each `RSSFeed`
     public func syncFeeds() async throws {
         let fetchRSSFeeds = FetchDescriptor<RSSFeed>()

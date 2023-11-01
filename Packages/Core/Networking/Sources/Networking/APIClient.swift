@@ -6,6 +6,8 @@
 //
 
 import FeedKit
+import Firebase
+import FirebaseDatabase
 import Foundation
 
 public class APIClient: APIInterface {
@@ -25,5 +27,19 @@ public class APIClient: APIInterface {
                 }
             }
         }
+    }
+
+    public func getSearchIndex() async throws -> [SearchIndexItemResponse]? {
+        let databaseReference = Database.database().reference()
+
+        databaseReference.database.goOnline()
+        let rawData = try await databaseReference.getData()
+        databaseReference.database.goOffline()
+
+        guard let rawData = rawData.value,
+              let jsonData = try? JSONSerialization.data(withJSONObject: rawData)
+        else { return nil }
+
+        return try? JSONDecoder().decode([SearchIndexItemResponse].self, from: jsonData)
     }
 }

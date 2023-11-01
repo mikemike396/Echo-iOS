@@ -55,6 +55,8 @@ struct EchoApp: App {
         Task.detached {
             let feedRepository = FeedRepository()
             try? await feedRepository.syncFeeds()
+
+            try? await feedRepository.getFeedSearchIndex()
         }
     }
 }
