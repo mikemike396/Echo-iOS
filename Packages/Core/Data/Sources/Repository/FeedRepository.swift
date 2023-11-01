@@ -49,7 +49,7 @@ public actor FeedRepository: ModelActor {
         let feedResponse = try await api.getRSSFeed(for: URL(string: link))
 
         newFeed.title = feedResponse?.title?.trimmingCharacters(in: .whitespacesAndNewlines)
-        newFeed.imageURL = getFeedIconURL(for: feedResponse?.image?.url, and: feedResponse?.link)
+        newFeed.imageURL = getFeedIconURL(for: feedResponse?.imageURL, and: feedResponse?.link)
 
         let items = feedResponse?.items?.map { item in
             let newFeedItem = newFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
@@ -59,20 +59,10 @@ public actor FeedRepository: ModelActor {
                 newFeedItem.isNew = false
             }
             newFeedItem.title = item.title?.trimmingCharacters(in: .whitespacesAndNewlines)
-            newFeedItem.publishedDate = item.pubDate
+            newFeedItem.publishedDate = item.publishedDate
             newFeedItem.link = item.link?.trimmingCharacters(in: .whitespacesAndNewlines)
+            newFeedItem.imageURL = getFeedItemImageURL(for: item)
 
-            // Attempt to get image via MediaContents
-            var mediaURL = item.media?.mediaContents?.first?.attributes?.url
-            if mediaURL == nil {
-                // Attempt to get image via Enclosure
-                mediaURL = item.enclosure?.attributes?.url
-            }
-            if mediaURL == nil {
-                // Attempt to get image via Description
-                mediaURL = try? getFeedItemImageURLForDescriptionHTML(item.description)?.absoluteString
-            }
-            newFeedItem.imageURL = URL(string: mediaURL ?? "")
             return newFeedItem
         }
 
@@ -147,5 +137,20 @@ extension FeedRepository {
             imageString = "\(link ?? "")/favicon.ico"
         }
         return URL(string: imageString)
+    }
+
+    private func getFeedItemImageURL(for item: RSSFeedItemResponse) -> URL? {
+        // Attempt to get image via MediaContents
+        var mediaURL = item.mediaContentsURL
+        if mediaURL == nil {
+            // Attempt to get image via Enclosure
+            mediaURL = item.enclosureURL
+            if mediaURL == nil {
+                // Attempt to get image via Description
+                mediaURL = try? getFeedItemImageURLForDescriptionHTML(item.description)?.absoluteString
+            }
+        }
+
+        return URL(string: mediaURL ?? "")
     }
 }

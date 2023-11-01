@@ -13,7 +13,7 @@ import Foundation
 public class APIClient: APIInterface {
     public init() {}
 
-    public func getRSSFeed(for url: URL?) async throws -> RSSFeed? {
+    public func getRSSFeed(for url: URL?) async throws -> RSSFeedResponse? {
         guard let url else { throw APIError.invalidURL }
 
         let parser = FeedParser(URL: url)
@@ -21,7 +21,7 @@ public class APIClient: APIInterface {
             parser.parseAsync { result in
                 switch result {
                 case .success(let feed):
-                    continuation.resume(returning: feed.rssFeed)
+                    continuation.resume(returning: RSSFeedResponse(rssFeed: feed.rssFeed))
                 case .failure(let error):
                     continuation.resume(throwing: error)
                 }
