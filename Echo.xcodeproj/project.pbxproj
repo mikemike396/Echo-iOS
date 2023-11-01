@@ -15,6 +15,8 @@
 		6412841E2AE821420094A199 /* EchoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6412841D2AE821420094A199 /* EchoUITestsLaunchTests.swift */; };
 		6442B31D2AE9489700ED892B /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 6442B31C2AE9489700ED892B /* Localizable.xcstrings */; };
 		644B076A2AEAC00200818A10 /* Feed in Frameworks */ = {isa = PBXBuildFile; productRef = 644B07692AEAC00200818A10 /* Feed */; };
+		648C010D2AF19D9700616193 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 648C010C2AF19D9700616193 /* GoogleService-Info.plist */; };
+		648D18EE2AF1990B009C1E92 /* Feed in Frameworks */ = {isa = PBXBuildFile; productRef = 648D18ED2AF1990B009C1E92 /* Feed */; };
 		64F924602AF1709200A9DC6C /* Feed in Frameworks */ = {isa = PBXBuildFile; productRef = 64F9245F2AF1709200A9DC6C /* Feed */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +53,7 @@
 		646510EA2AE96928001A524C /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Networking; sourceTree = "<group>"; };
 		646510EB2AE96928001A524C /* Utilities */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Utilities; sourceTree = "<group>"; };
 		646510EC2AE96A9E001A524C /* Data */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Data; path = Packages/Core/Data; sourceTree = SOURCE_ROOT; };
+		648C010C2AF19D9700616193 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				648D18EE2AF1990B009C1E92 /* Feed in Frameworks */,
 				64F924602AF1709200A9DC6C /* Feed in Frameworks */,
 				644B076A2AEAC00200818A10 /* Feed in Frameworks */,
 			);
@@ -107,6 +111,7 @@
 				641283FE2AE821410094A199 /* EchoApp.swift */,
 				641284042AE821420094A199 /* Assets.xcassets */,
 				6442B31C2AE9489700ED892B /* Localizable.xcstrings */,
+				648C010C2AF19D9700616193 /* GoogleService-Info.plist */,
 				641284062AE821420094A199 /* Preview Content */,
 			);
 			path = Echo;
@@ -184,6 +189,7 @@
 			packageProductDependencies = (
 				644B07692AEAC00200818A10 /* Feed */,
 				64F9245F2AF1709200A9DC6C /* Feed */,
+				648D18ED2AF1990B009C1E92 /* Feed */,
 			);
 			productName = Echo;
 			productReference = 641283FB2AE821410094A199 /* Echo.app */;
@@ -258,7 +264,7 @@
 			);
 			mainGroup = 641283F22AE821410094A199;
 			packageReferences = (
-				64F9245E2AF1709200A9DC6C /* XCLocalSwiftPackageReference "Packages/Features/Feed" */,
+				648D18EC2AF1990B009C1E92 /* XCLocalSwiftPackageReference "Packages/Features/Feed" */,
 			);
 			productRefGroup = 641283FC2AE821410094A199 /* Products */;
 			projectDirPath = "";
@@ -277,6 +283,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				641284082AE821420094A199 /* Preview Assets.xcassets in Resources */,
+				648C010D2AF19D9700616193 /* GoogleService-Info.plist in Resources */,
 				641284052AE821420094A199 /* Assets.xcassets in Resources */,
 				6442B31D2AE9489700ED892B /* Localizable.xcstrings in Resources */,
 			);
@@ -631,7 +638,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		64F9245E2AF1709200A9DC6C /* XCLocalSwiftPackageReference "Packages/Features/Feed" */ = {
+		648D18EC2AF1990B009C1E92 /* XCLocalSwiftPackageReference "Packages/Features/Feed" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/Features/Feed;
 		};
@@ -639,6 +646,10 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		644B07692AEAC00200818A10 /* Feed */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Feed;
+		};
+		648D18ED2AF1990B009C1E92 /* Feed */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Feed;
 		};

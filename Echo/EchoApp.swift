@@ -7,6 +7,7 @@
 
 import Data
 import Feed
+import Firebase
 import SDWebImage
 import SwiftData
 import SwiftUI
@@ -22,6 +23,8 @@ struct EchoApp: App {
     init() {
         container = EchoModelContainer.shared.modelContainer
         print("App Directory Path: \(NSHomeDirectory())")
+
+        FirebaseApp.configure()
 
         // Never expires based on time
         SDImageCache.shared.config.maxDiskAge = -1
