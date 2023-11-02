@@ -9,5 +9,5 @@ import Foundation
 
 public struct SearchIndexItemResponse: Decodable {
     public let title: String
-    public let url: URL
+    public let url: String
 }

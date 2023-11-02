@@ -37,7 +37,8 @@ public class APIClient: APIInterface {
             let rawData = try await databaseReference.getData()
             databaseReference.database.goOffline()
 
-            guard let rawData = rawData.value,
+            guard rawData.exists(),
+                  let rawData = rawData.value,
                   let jsonData = try? JSONSerialization.data(withJSONObject: rawData)
             else { return nil }
 
@@ -46,6 +47,20 @@ public class APIClient: APIInterface {
                 SearchIndexResponse(id: item.key, item: SearchIndexItemResponse(title: item.value.title, url: item.value.url))
             }
             return results
+        } catch {
+            throw error
+        }
+    }
+
+    public func putSearchIndexItem(for title: String, link: String) async throws {
+        do {
+            let databaseReference = Database.database().reference()
+            databaseReference.database.goOnline()
+            let newItem = databaseReference.childByAutoId()
+            
+            try await newItem.updateChildValues(["title": title, "url": link])
+            databaseReference.database.goOffline()
+
         } catch {
             throw error
         }

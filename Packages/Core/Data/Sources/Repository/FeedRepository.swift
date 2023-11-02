@@ -34,7 +34,7 @@ public actor FeedRepository: ModelActor {
         }
 
         for item in results {
-            let newItem = SearchIndexItem(id: item.id, title: item.item.title, url: item.item.url)
+            let newItem = SearchIndexItem(id: item.id, title: item.item.title, link: item.item.url)
 
             modelExecutor.modelContext.insert(newItem)
         }
@@ -47,23 +47,26 @@ public actor FeedRepository: ModelActor {
         let rssFeeds = try? modelExecutor.modelContext.fetch(fetchRSSFeeds)
 
         for rssFeed in rssFeeds ?? [] {
-            if let link = rssFeed.link {
-                try await updateFeed(link: link)
+            let feedResponse = try await api.getRSSFeed(for: URL(string: rssFeed.link ?? ""))
+
+            if let feedResponse,
+               let link = rssFeed.link
+            {
+                try await updateFeed(for: link, with: feedResponse)
             }
         }
     }
 
-    public func updateFeed(link: String) async throws {
+    public func updateFeed(for link: String, with feedResponse: RSSFeedResponse) async throws {
         let predicate = #Predicate<RSSFeed> { $0.link == link }
         let fetchFeed = FetchDescriptor(predicate: predicate)
         let newFeed = (try? modelExecutor.modelContext.fetch(fetchFeed))?.first ?? RSSFeed()
 
-        let feedResponse = try await api.getRSSFeed(for: URL(string: link))
+        newFeed.title = feedResponse.title?.trimmingCharacters(in: .whitespacesAndNewlines)
+        newFeed.imageURL = getFeedIconURL(for: feedResponse.imageURL, and: feedResponse.link)
+        newFeed.link = link
 
-        newFeed.title = feedResponse?.title?.trimmingCharacters(in: .whitespacesAndNewlines)
-        newFeed.imageURL = getFeedIconURL(for: feedResponse?.imageURL, and: feedResponse?.link)
-
-        let items = feedResponse?.items?.map { item in
+        let items = feedResponse.items?.map { item in
             let newFeedItem = newFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
             if newFeedItem.link == nil {
                 newFeedItem.isNew = true
@@ -99,19 +102,26 @@ public actor FeedRepository: ModelActor {
     /// Adds a new `RSSFeed` item for the provided link
     /// - Parameter link: String value for the `RSSFeed` link
     public func addFeed(link: String?) async throws {
-        let predicate = #Predicate<RSSFeed> { $0.link == link }
-        let fetchFeed = FetchDescriptor(predicate: predicate)
-        let newFeed = (try? modelExecutor.modelContext.fetch(fetchFeed))?.first ?? RSSFeed()
+        let feedResponse = try await api.getRSSFeed(for: URL(string: link ?? ""))
 
-        newFeed.link = link
-        newFeed.addDate = .now
-        newFeed.title = link
+        if let feedResponse,
+           let title = feedResponse.title?.trimmingCharacters(in: .whitespacesAndNewlines),
+           let link = link
+        {
+            /// Add feed to DB
+            try await updateFeed(for: link, with: feedResponse)
 
-        modelExecutor.modelContext.insert(newFeed)
-        try modelExecutor.modelContext.save()
+            /// Fetch Latest Firebase Search Index
+            try await getFeedSearchIndex()
 
-        if let link {
-            try await updateFeed(link: link)
+            var descriptor = FetchDescriptor<SearchIndexItem>()
+            descriptor.predicate = #Predicate<SearchIndexItem> { item in
+                item.link == link
+            }
+            if (try? modelExecutor.modelContext.fetch(descriptor))?.first == nil {
+                /// Send to Firebase Database if its not already in the index
+                try await api.putSearchIndexItem(for: title, link: link)
+            }
         }
     }
 

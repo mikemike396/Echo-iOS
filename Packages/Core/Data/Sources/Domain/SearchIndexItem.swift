@@ -12,11 +12,11 @@ import SwiftData
 final public class SearchIndexItem {
     @Attribute(.unique) public let id: String
     public let title: String
-    public let url: URL
+    public let link: String
 
-    public init(id: String, title: String, url: URL) {
+    public init(id: String, title: String, link: String) {
         self.id = id
         self.title = title
-        self.url = url
+        self.link = link
     }
 }

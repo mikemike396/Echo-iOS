@@ -10,4 +10,5 @@ import Foundation
 public protocol APIInterface {
     func getRSSFeed(for url: URL?) async throws -> RSSFeedResponse?
     func getSearchIndex() async throws -> [SearchIndexResponse]?
+    func putSearchIndexItem(for title: String, link: String) async throws
 }

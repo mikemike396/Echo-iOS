@@ -33,7 +33,7 @@ public struct AddFeedScreen: View {
 
     var filteredSearchIndexItems: [SearchIndexItem] {
         let searchPredicate = #Predicate<SearchIndexItem> {
-            $0.title.localizedStandardContains(addFeedText)
+            $0.title.localizedStandardContains(addFeedText) || $0.link.localizedStandardContains(addFeedText)
         }
         return (try? searchIndexItems.filter(searchPredicate)) ?? []
     }
@@ -70,12 +70,11 @@ public struct AddFeedScreen: View {
 extension AddFeedScreen {
     @ViewBuilder private var searchSection: some View {
         List {
-            if validURL {
+            if validURL && filteredSearchIndexItems.count == 0 {
                 cell(with: addFeedText, and: addFeedText)
-            } else {
-                ForEach(filteredSearchIndexItems) { item in
-                    cell(with: item.title, and: item.url.absoluteString)
-                }
+            }
+            ForEach(filteredSearchIndexItems) { item in
+                cell(with: item.title, and: item.link)
             }
         }
     }
