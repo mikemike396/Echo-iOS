@@ -9,5 +9,5 @@ import Foundation
 
 public protocol APIInterface {
     func getRSSFeed(for url: URL?) async throws -> RSSFeedResponse?
-    func getSearchIndex() async throws -> [SearchIndexItemResponse]?
+    func getSearchIndex() async throws -> [SearchIndexResponse]?
 }

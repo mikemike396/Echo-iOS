@@ -2,7 +2,7 @@
 //  SearchIndexItemResponse.swift
 //
 //
-//  Created by Michael Kushinski on 11/1/23.
+//  Created by Michael Kushinski on 11/2/23.
 //
 
 import Foundation

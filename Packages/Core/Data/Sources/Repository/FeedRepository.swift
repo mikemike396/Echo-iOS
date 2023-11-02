@@ -34,7 +34,7 @@ public actor FeedRepository: ModelActor {
         }
 
         for item in results {
-            let newItem = SearchIndexItem(title: item.title, url: item.url)
+            let newItem = SearchIndexItem(id: item.id, title: item.item.title, url: item.item.url)
 
             modelExecutor.modelContext.insert(newItem)
         }

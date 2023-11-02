@@ -29,17 +29,25 @@ public class APIClient: APIInterface {
         }
     }
 
-    public func getSearchIndex() async throws -> [SearchIndexItemResponse]? {
-        let databaseReference = Database.database().reference()
+    public func getSearchIndex() async throws -> [SearchIndexResponse]? {
+        do {
+            let databaseReference = Database.database().reference()
 
-        databaseReference.database.goOnline()
-        let rawData = try await databaseReference.getData()
-        databaseReference.database.goOffline()
+            databaseReference.database.goOnline()
+            let rawData = try await databaseReference.getData()
+            databaseReference.database.goOffline()
 
-        guard let rawData = rawData.value,
-              let jsonData = try? JSONSerialization.data(withJSONObject: rawData)
-        else { return nil }
+            guard let rawData = rawData.value,
+                  let jsonData = try? JSONSerialization.data(withJSONObject: rawData)
+            else { return nil }
 
-        return try? JSONDecoder().decode([SearchIndexItemResponse].self, from: jsonData)
+            let response = try? JSONDecoder().decode([String: SearchIndexItemResponse].self, from: jsonData)
+            let results = response?.map { item in
+                SearchIndexResponse(id: item.key, item: SearchIndexItemResponse(title: item.value.title, url: item.value.url))
+            }
+            return results
+        } catch {
+            throw error
+        }
     }
 }
