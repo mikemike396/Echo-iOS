@@ -29,6 +29,7 @@ public struct AddFeedScreen: View {
 
     @State private var addFeedText: String = ""
     @State private var isSearchActive = false
+    @State private var validURL = false
 
     var filteredSearchIndexItems: [SearchIndexItem] {
         let searchPredicate = #Predicate<SearchIndexItem> {
@@ -58,6 +59,9 @@ public struct AddFeedScreen: View {
         .navigationTitle("Manage")
         .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $addFeedText, isPresented: $isSearchActive, placement: .navigationBarDrawer(displayMode: .always), prompt: "Type a name, or paste a URL")
+        .onChange(of: addFeedText) {
+            validURL = validURL(addFeedText)
+        }
     }
 }
 
@@ -66,20 +70,27 @@ public struct AddFeedScreen: View {
 extension AddFeedScreen {
     @ViewBuilder private var searchSection: some View {
         List {
-            ForEach(filteredSearchIndexItems) { item in
-                Button {
-                    addFeedText = ""
-                    isSearchActive = false
-                    Task {
-                        try? await feedRepo.addFeed(link: item.url.absoluteString)
-
-                    }
-                } label: {
-                    NavigationLink(item.title, destination: EmptyView())
+            if validURL {
+                cell(with: addFeedText, and: addFeedText)
+            } else {
+                ForEach(filteredSearchIndexItems) { item in
+                    cell(with: item.title, and: item.url.absoluteString)
                 }
-                .foregroundColor(Color(uiColor: .label))
             }
         }
+    }
+
+    private func cell(with title: String, and link: String) -> some View {
+        Button {
+            isSearchActive = false
+            addFeedText = ""
+            Task {
+                try? await feedRepo.addFeed(link: link)
+            }
+        } label: {
+            NavigationLink(title, destination: EmptyView())
+        }
+        .foregroundColor(Color(uiColor: .label))
     }
 
     @ViewBuilder private var editFeedSection: some View {
@@ -101,6 +112,17 @@ extension AddFeedScreen {
                 }
             }
         }
+    }
+}
+
+extension AddFeedScreen {
+    private func validURL(_ string: String?) -> Bool {
+        guard let string,
+              let url = URL(string: string),
+              UIApplication.shared.canOpenURL(url)
+        else { return false }
+        
+        return true
     }
 }
 
