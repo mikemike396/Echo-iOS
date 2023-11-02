@@ -1,7 +1,7 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Add Feed" : {
+    "" : {
 
     },
     "Close" : {
@@ -13,7 +13,7 @@
     "Manage" : {
 
     },
-    "URL" : {
+    "Type a name, or paste a URL" : {
 
     }
   },

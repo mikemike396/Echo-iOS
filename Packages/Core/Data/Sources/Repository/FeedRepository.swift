@@ -23,10 +23,22 @@ public actor FeedRepository: ModelActor {
         self.api = api
     }
     
-    /// Calls Firebase fetch the latest Search index
+    /// Calls Firebase to fetch the latest Search index
     public func getFeedSearchIndex() async throws {
-        let result = try await api.getSearchIndex()
-        print("test")
+        guard let results = try await api.getSearchIndex() else { return }
+
+        let fetchSearchIndex = FetchDescriptor<SearchIndexItem>()
+        let items = try? modelExecutor.modelContext.fetch(fetchSearchIndex)
+        for item in items ?? [] {
+            modelExecutor.modelContext.delete(item)
+        }
+
+        for item in results {
+            let newItem = SearchIndexItem(title: item.title, url: item.url)
+
+            modelExecutor.modelContext.insert(newItem)
+        }
+        try modelExecutor.modelContext.save()
     }
 
     /// Calls `getRSSFeed()` to fetch the latest for each `RSSFeed`
@@ -111,6 +123,9 @@ public actor FeedRepository: ModelActor {
             item.link == link
         }
         if let result = (try? modelExecutor.modelContext.fetch(descriptor))?.first {
+            for item in result.items {
+                modelExecutor.modelContext.delete(item)
+            }
             modelExecutor.modelContext.delete(result)
             try modelExecutor.modelContext.save()
         }

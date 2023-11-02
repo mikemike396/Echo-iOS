@@ -20,6 +20,10 @@ struct EchoApp: App {
 
     let container: ModelContainer
 
+    // MARK: Private Variables
+
+    @State private var hasEnteredBackground = false
+
     init() {
         container = EchoModelContainer.shared.modelContainer
         print("App Directory Path: \(NSHomeDirectory())")
@@ -30,8 +34,6 @@ struct EchoApp: App {
         SDImageCache.shared.config.maxDiskAge = -1
         // Expire after 500 MB
         SDImageCache.shared.config.maxDiskSize = 1000 * 1000 * 500
-
-        syncFeeds()
     }
 
     var body: some Scene {
@@ -43,7 +45,11 @@ struct EchoApp: App {
         .onChange(of: scenePhase, initial: false) { oldPhase, newPhase in
             switch newPhase {
             case .active:
-                break
+                if !hasEnteredBackground {
+                    syncFeeds()
+                }
+            case .background:
+                hasEnteredBackground = true
             default:
                 break
             }

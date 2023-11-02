@@ -16,6 +16,7 @@ final public class EchoModelContainer {
         let schema = Schema([
             RSSFeed.self,
             RSSFeedItem.self,
+            SearchIndexItem.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
