@@ -1,4 +1,4 @@
-# Echo-iOS
+# Echo-iOS1
 <img src="documentation/images/echo-icon.png" width="100" /> 
 
 A simple RSS reader using the latest iOS features.
