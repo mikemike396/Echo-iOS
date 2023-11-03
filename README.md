@@ -22,6 +22,9 @@ A simple RSS reader using the latest iOS features.
 ## Contributions
 - Feel free to open a PR to contribute!
 
+## Other Platforms
+[Android](https://github.com/IanCrossCD/Echo-Android)
+
 ## Feeds
 - [9to5mac](https://9to5mac.com/feed/)
 - [MacRumors](https://feeds.macrumors.com/MacRumors-All)
