@@ -1,4 +1,6 @@
 # Echo-iOS
+<img src="documentation/images/echo-icon.png" width="100" /> 
+
 A simple RSS reader using the latest iOS features.
 
 <img src="documentation/images/home.png" height="600" /> <img src="documentation/images/manage.png" height="600" />
