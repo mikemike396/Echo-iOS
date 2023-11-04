@@ -89,3 +89,6 @@ fastlane/test_output
 
 iOSInjectionProject/
 Echo/GoogleService-Info.plist
+
+# Ignore Mac DS_Store files
+.DS_Store
