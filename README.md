@@ -17,7 +17,8 @@ A simple RSS reader using the latest iOS features.
 - Xcode version 15.0+
 
 ## Setup
-- Uses Firebase Realtime Datebase to drive the feed search index. To build this project locally you need to setup a personal Firebase project and include the plist at `Echo/GoogleService-Info.plist`.
+- Install SwiftLint `brew install swiftlint`
+- Using Firebase Realtime Datebase to drive the feed search index. To build this project locally you need to setup a personal Firebase project and include the plist at `Echo/GoogleService-Info.plist`.
 
 ## Contributions
 - Feel free to open a PR to contribute!
