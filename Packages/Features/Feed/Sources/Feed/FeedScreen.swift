@@ -83,8 +83,8 @@ extension FeedScreen {
             try? await feedRepo.setItemRead(link: string)
         }
 
-        let vc = SFSafariViewController(url: url)
-        UIApplication.shared.firstKeyWindow?.rootViewController?.present(vc, animated: true)
+        let sfViewController = SFSafariViewController(url: url)
+        UIApplication.shared.firstKeyWindow?.rootViewController?.present(sfViewController, animated: true)
     }
 }
 

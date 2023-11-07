@@ -42,7 +42,7 @@ struct EchoApp: App {
                 FeedScreen()
             }
         }
-        .onChange(of: scenePhase, initial: false) { oldPhase, newPhase in
+        .onChange(of: scenePhase, initial: false) { _, newPhase in
             switch newPhase {
             case .active:
                 if !hasEnteredBackground {

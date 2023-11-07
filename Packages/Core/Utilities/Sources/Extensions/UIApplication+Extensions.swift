@@ -8,10 +8,11 @@
 import UIKit
 
 extension UIApplication {
+    /// Finds the first window via the UIApplication Connected Scenes
     public var firstKeyWindow: UIWindow? {
         UIApplication.shared.connectedScenes
             .compactMap { $0 as? UIWindowScene }
-            .filter { $0.activationState == .foregroundActive }
-            .first?.keyWindow
+            .first { $0.activationState == .foregroundActive }?
+            .keyWindow
     }
 }

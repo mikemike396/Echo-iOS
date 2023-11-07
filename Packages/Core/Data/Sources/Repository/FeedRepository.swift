@@ -23,7 +23,7 @@ public actor FeedRepository: ModelActor {
         self.api = api
     }
     
-    /// Calls Firebase to fetch the latest Search index
+    /// Calls Firebase to fetch the latest Search indexes
     public func getFeedSearchIndex() async throws {
         guard let results = try await api.getSearchIndex() else { return }
 
@@ -41,7 +41,7 @@ public actor FeedRepository: ModelActor {
         try modelExecutor.modelContext.save()
     }
 
-    /// Calls `getRSSFeed()` to fetch the latest for each `RSSFeed`
+    /// Refreshes all the users `RSSFeed`s by calling `api.getRSSFeed` for each one
     public func syncFeeds() async throws {
         let fetchRSSFeeds = FetchDescriptor<RSSFeed>()
         let rssFeeds = try? modelExecutor.modelContext.fetch(fetchRSSFeeds)
@@ -56,7 +56,11 @@ public actor FeedRepository: ModelActor {
             }
         }
     }
-
+    
+    /// Updates or creates a new `RSSFeed` for the provided link and feedResponse
+    /// - Parameters:
+    ///   - link: `RSSFeed` link
+    ///   - feedResponse: Response from the `api.getRSSFeed` endpoint
     public func updateFeed(for link: String, with feedResponse: RSSFeedResponse) async throws {
         let predicate = #Predicate<RSSFeed> { $0.link == link }
         let fetchFeed = FetchDescriptor(predicate: predicate)
@@ -68,7 +72,7 @@ public actor FeedRepository: ModelActor {
         newFeed.addDate = .now
 
         let items = feedResponse.items?.map { item in
-            let newFeedItem = newFeed.items.first(where: { $0.link == item.link }) ?? RSSFeedItem()
+            let newFeedItem = newFeed.items.first { $0.link == item.link } ?? RSSFeedItem()
             if newFeedItem.link == nil {
                 newFeedItem.isNew = true
             } else {
@@ -146,6 +150,9 @@ public actor FeedRepository: ModelActor {
 // MARK: Private Functions
 
 extension FeedRepository {
+    /// Parse description HTML field for image url
+    /// - Parameter html: HTML string containing URL
+    /// - Returns: Optional URL
     private func getFeedItemImageURLForDescriptionHTML(_ html: String?) throws -> URL? {
         guard let html else { return nil }
 
@@ -154,7 +161,12 @@ extension FeedRepository {
         let array = srcs.array().compactMap { try? $0.attr("src").description }
         return URL(string: array.first ?? "")
     }
-
+    
+    /// Parse feed icon URL
+    /// - Parameters:
+    ///   - imageURL: imageURL string to convert to URL
+    ///   - link: Feed link to use if imageURL is nil which appends favicon.ico to end
+    /// - Returns: Optional URL
     private func getFeedIconURL(for imageURL: String?, and link: String?) -> URL? {
         var imageString = ""
         if let imageURL {
@@ -164,15 +176,18 @@ extension FeedRepository {
         }
         return URL(string: imageString)
     }
-
+    
+    /// Parse feed item image URL
+    /// - Parameter item: RSSFeedItem response
+    /// - Returns: Optional URL
     private func getFeedItemImageURL(for item: RSSFeedItemResponse) -> URL? {
-        // Attempt to get image via MediaContents
+        /// Attempt to get image via MediaContents
         var mediaURL = item.mediaContentsURL
         if mediaURL == nil {
-            // Attempt to get image via Enclosure
+            /// Attempt to get image via Enclosure
             mediaURL = item.enclosureURL
             if mediaURL == nil {
-                // Attempt to get image via Description
+                /// Attempt to get image via Description
                 mediaURL = try? getFeedItemImageURLForDescriptionHTML(item.description)?.absoluteString
             }
         }

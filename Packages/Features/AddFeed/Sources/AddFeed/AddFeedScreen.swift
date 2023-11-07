@@ -32,8 +32,8 @@ public struct AddFeedScreen: View {
     @State private var validURL = false
 
     var filteredSearchIndexItems: [SearchIndexItem] {
-        let searchPredicate = #Predicate<SearchIndexItem> {
-            $0.title.localizedStandardContains(addFeedText) || $0.link.localizedStandardContains(addFeedText)
+        let searchPredicate = #Predicate<SearchIndexItem> { item in
+            item.title.localizedStandardContains(addFeedText) || item.link.localizedStandardContains(addFeedText)
         }
         return (try? searchIndexItems.filter(searchPredicate)) ?? []
     }
