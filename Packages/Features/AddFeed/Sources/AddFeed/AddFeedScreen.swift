@@ -30,6 +30,7 @@ public struct AddFeedScreen: View {
     @State private var addFeedText: String = ""
     @State private var isSearchActive = false
     @State private var validURL = false
+    @State private var linksLoading = Set<String>()
 
     var filteredSearchIndexItems: [SearchIndexItem] {
         let searchPredicate = #Predicate<SearchIndexItem> { item in
@@ -81,18 +82,22 @@ extension AddFeedScreen {
 
     private func cell(with title: String, and link: String) -> some View {
         Button {
+            linksLoading.insert(link)
             Task {
                 if self.feedAdded(link: link) {
                     try? await feedRepo.deleteFeed(link: link)
                 } else {
                     try? await feedRepo.addFeed(link: link)
                 }
+                linksLoading.remove(link)
             }
         } label: {
             HStack {
                 Text(title)
                 Spacer()
-                if feedAdded(link: link) {
+                if linksLoading.contains(link) {
+                    ProgressView()
+                } else if feedAdded(link: link) {
                     Image(systemName: "checkmark")
                         .font(.system(.body))
                         .foregroundColor(Color.accentColor)
