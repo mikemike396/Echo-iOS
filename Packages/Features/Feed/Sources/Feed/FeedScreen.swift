@@ -23,11 +23,18 @@ public struct FeedScreen: View {
 
     // MARK: SwiftData
 
-    @Query(sort: \RSSFeedItem.publishedDate, order: .reverse, animation: .default) private var items: [RSSFeedItem]
+    @Query(itemsFetchDescriptor, animation: .default) private var items: [RSSFeedItem]
 
     // MARK: State Variables
 
     @State private var addFeedPresented = false
+
+    private static var itemsFetchDescriptor: FetchDescriptor<RSSFeedItem> {
+        var fetchDescriptor = FetchDescriptor<RSSFeedItem>()
+        fetchDescriptor.sortBy = [SortDescriptor(\RSSFeedItem.publishedDate, order: .reverse)]
+        fetchDescriptor.fetchLimit = 250
+        return fetchDescriptor
+    }
 
     public init(feedRepo: FeedRepository = FeedRepository()) {
         self.feedRepo = feedRepo
