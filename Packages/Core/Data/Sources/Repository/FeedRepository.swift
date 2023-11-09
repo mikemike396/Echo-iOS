@@ -69,7 +69,9 @@ public actor FeedRepository: ModelActor {
         newFeed.title = feedResponse.title?.trimmingCharacters(in: .whitespacesAndNewlines)
         newFeed.imageURL = getFeedIconURL(for: feedResponse.imageURL, and: feedResponse.link)
         newFeed.link = link
-        newFeed.addDate = .now
+        if newFeed.addDate == nil {
+            newFeed.addDate = .now
+        }
 
         let items = feedResponse.items?.map { item in
             let newFeedItem = newFeed.items.first { $0.link == item.link } ?? RSSFeedItem()

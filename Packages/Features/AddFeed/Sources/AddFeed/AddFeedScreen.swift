@@ -81,13 +81,23 @@ extension AddFeedScreen {
 
     private func cell(with title: String, and link: String) -> some View {
         Button {
-            isSearchActive = false
-            addFeedText = ""
             Task {
-                try? await feedRepo.addFeed(link: link)
+                if self.feedAdded(link: link) {
+                    try? await feedRepo.deleteFeed(link: link)
+                } else {
+                    try? await feedRepo.addFeed(link: link)
+                }
             }
         } label: {
-            NavigationLink(title, destination: EmptyView())
+            HStack {
+                Text(title)
+                Spacer()
+                if feedAdded(link: link) {
+                    Image(systemName: "checkmark")
+                        .font(.system(.body))
+                        .foregroundColor(Color.accentColor)
+                }
+            }
         }
         .foregroundColor(Color(uiColor: .label))
     }
@@ -121,6 +131,11 @@ extension AddFeedScreen {
               UIApplication.shared.canOpenURL(url)
         else { return false }
         
+        return true
+    }
+
+    private func feedAdded(link: String?) -> Bool {
+        guard feeds.contains(where: { $0.link == link }) else { return false}
         return true
     }
 }
