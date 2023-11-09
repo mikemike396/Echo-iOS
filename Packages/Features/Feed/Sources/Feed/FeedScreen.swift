@@ -28,6 +28,13 @@ public struct FeedScreen: View {
     // MARK: State Variables
 
     @State private var addFeedPresented = false
+    @State private var filterFeedPresented = false
+    @State private var activeFilters = Set<String>()
+
+    private var filteredItems: [RSSFeedItem] {
+        guard !activeFilters.isEmpty else { return items }
+        return items.filter { activeFilters.contains($0.feed?.link ?? "") }
+    }
 
     private static var itemsFetchDescriptor: FetchDescriptor<RSSFeedItem> {
         var fetchDescriptor = FetchDescriptor<RSSFeedItem>()
@@ -43,7 +50,7 @@ public struct FeedScreen: View {
     public var body: some View {
         VStack {
             List {
-                ForEach(items) { item in
+                ForEach(filteredItems) { item in
                     Button {
                         navigateToLink(item.link)
                     } label: {
@@ -57,10 +64,19 @@ public struct FeedScreen: View {
             }
         }
         .toolbar {
-            Button {
-                addFeedPresented = true
-            } label: {
-                Image(systemName: "plus")
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    filterFeedPresented = true
+                } label: {
+                    Image(systemName: activeFilters.isEmpty ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill")
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    addFeedPresented = true
+                } label: {
+                    Image(systemName: "plus")
+                }
             }
         }
         .onAppear {
@@ -72,6 +88,11 @@ public struct FeedScreen: View {
             NavigationStack {
                 AddFeedScreen()
             }
+        }
+        .sheet(isPresented: $filterFeedPresented) {
+            FilterSheet(activeFilter: $activeFilters)
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
         }
         .navigationTitle("Feed")
     }

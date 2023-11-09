@@ -104,7 +104,7 @@ extension AddFeedScreen {
                 }
             }
         }
-        .foregroundColor(Color(uiColor: .label))
+        .foregroundColor(Color(.label))
     }
 
     @ViewBuilder private var editFeedSection: some View {
