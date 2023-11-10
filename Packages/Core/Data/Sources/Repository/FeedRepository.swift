@@ -109,6 +109,12 @@ public actor FeedRepository: ModelActor {
     /// Adds a new `RSSFeed` item for the provided link
     /// - Parameter link: String value for the `RSSFeed` link
     public func addFeed(link: String?) async throws {
+        var link = link
+        /// Drop the last slash
+        if link?.last == "/" {
+            link = String(link?.dropLast() ?? "")
+        }
+
         let feedResponse = try await api.getRSSFeed(for: URL(string: link ?? ""))
 
         if let feedResponse,
