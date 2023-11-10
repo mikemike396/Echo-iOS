@@ -32,7 +32,7 @@ struct FeedCell: View {
                                     .frame(width: 50, height: 50)
                             }
                         } else {
-                            Rectangle()
+                            ProgressView()
                         }
                     }
                     .onSuccess { _, _, _ in
