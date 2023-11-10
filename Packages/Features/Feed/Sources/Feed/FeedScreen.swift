@@ -30,10 +30,28 @@ public struct FeedScreen: View {
     @State private var addFeedPresented = false
     @State private var filterFeedPresented = false
     @State private var activeFilters = Set<String>()
+    @State private var activeSort = FeedOrder.newest
 
     private var filteredItems: [RSSFeedItem] {
-        guard !activeFilters.isEmpty else { return items }
-        return items.filter { activeFilters.contains($0.feed?.link ?? "") }
+        var sortedItems = items
+
+        /// Apply filters if we have any set
+        if !activeFilters.isEmpty {
+            sortedItems = items.filter { activeFilters.contains($0.feed?.link ?? "") }
+        }
+
+        /// Sort the items by selected FeedOrder
+        switch activeSort {
+        case .newest:
+            sortedItems = sortedItems.sorted(by: { $0.publishedDate ?? .now > $1.publishedDate ?? .now })
+        case .oldest:
+            sortedItems = sortedItems.sorted(by: { $0.publishedDate ?? .now < $1.publishedDate ?? .now })
+        case .unread:
+            sortedItems = sortedItems.sorted(by: { !$0.hasRead && $1.hasRead })
+        case .new:
+            sortedItems = sortedItems.sorted(by: { $0.isNew && !$1.isNew })
+        }
+        return sortedItems
     }
 
     private static var itemsFetchDescriptor: FetchDescriptor<RSSFeedItem> {
@@ -64,12 +82,15 @@ public struct FeedScreen: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
+            ToolbarItem(placement: .bottomBar) {
                 Button {
                     filterFeedPresented = true
                 } label: {
                     Image(systemName: activeFilters.isEmpty ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill")
                 }
+            }
+            ToolbarItem(placement: .bottomBar) {
+                sortMenu
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -95,6 +116,22 @@ public struct FeedScreen: View {
                 .presentationDragIndicator(.visible)
         }
         .navigationTitle("Feed")
+    }
+}
+
+// MARK: Menus
+
+extension FeedScreen {
+    private var sortMenu: some View {
+        Menu {
+            Picker("", selection: $activeSort) {
+                ForEach(FeedOrder.allCases, id: \.self) { item in
+                    Text(item.rawValue)
+                }
+            }
+        } label: {
+            Image(systemName: "arrow.up.arrow.down.circle")
+        }
     }
 }
 
