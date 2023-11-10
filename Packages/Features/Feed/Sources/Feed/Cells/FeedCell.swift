@@ -11,6 +11,7 @@ import SwiftUI
 
 struct FeedCell: View {
     let item: RSSFeedItem
+    @State private var imageURLFailed = false
 
     var body: some View {
         VStack(spacing: 5) {
@@ -22,8 +23,23 @@ struct FeedCell: View {
                     .multilineTextAlignment(.leading)
                 WebImage(url: item.imageURL)
                     .placeholder {
-                        Rectangle()
-                            .fill(.separator)
+                        if imageURLFailed {
+                            ZStack {
+                                Rectangle()
+                                    .fill(.separator.opacity(0.5))
+                                Image("echo-icon", bundle: .module)
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                            }
+                        } else {
+                            Rectangle()
+                        }
+                    }
+                    .onSuccess { _, _, _ in
+                        imageURLFailed = false
+                    }
+                    .onFailure { _ in
+                        imageURLFailed = true
                     }
                     .resizable()
                     .scaledToFill()
