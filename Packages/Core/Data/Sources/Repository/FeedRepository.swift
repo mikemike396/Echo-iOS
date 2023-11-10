@@ -66,7 +66,7 @@ public actor FeedRepository: ModelActor {
         let fetchFeed = FetchDescriptor(predicate: predicate)
         let newFeed = (try? modelExecutor.modelContext.fetch(fetchFeed))?.first ?? RSSFeed()
 
-        newFeed.title = feedResponse.title?.trimmingCharacters(in: .whitespacesAndNewlines)
+        newFeed.title = feedResponse.title
         newFeed.imageURL = getFeedIconURL(for: feedResponse.imageURL, and: feedResponse.link)
         newFeed.link = link
         if newFeed.addDate == nil {
@@ -80,9 +80,9 @@ public actor FeedRepository: ModelActor {
             } else {
                 newFeedItem.isNew = false
             }
-            newFeedItem.title = item.title?.trimmingCharacters(in: .whitespacesAndNewlines)
+            newFeedItem.title = item.title
             newFeedItem.publishedDate = item.publishedDate
-            newFeedItem.link = item.link?.trimmingCharacters(in: .whitespacesAndNewlines)
+            newFeedItem.link = item.link
             newFeedItem.imageURL = getFeedItemImageURL(for: item)
 
             return newFeedItem
@@ -112,7 +112,7 @@ public actor FeedRepository: ModelActor {
         let feedResponse = try await api.getRSSFeed(for: URL(string: link ?? ""))
 
         if let feedResponse,
-           let title = feedResponse.title?.trimmingCharacters(in: .whitespacesAndNewlines),
+           let title = feedResponse.title,
            let link = link
         {
             /// Add feed to DB

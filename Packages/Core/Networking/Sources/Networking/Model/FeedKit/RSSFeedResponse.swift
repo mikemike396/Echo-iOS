@@ -15,9 +15,9 @@ public struct RSSFeedResponse {
     public let items: [RSSFeedItemResponse]?
 
     init(rssFeed: RSSFeed?) {
-        title = rssFeed?.title
-        link = rssFeed?.link
+        title = rssFeed?.title?.trimmingCharacters(in: .whitespacesAndNewlines)
+        link = rssFeed?.link?.trimmingCharacters(in: .whitespacesAndNewlines)
         imageURL = rssFeed?.image?.url
-        items = rssFeed?.items?.map { RSSFeedItemResponse(title: $0.title, link: $0.link, publishedDate: $0.pubDate, mediaContentsURL: $0.media?.mediaContents?.first?.attributes?.url, enclosureURL: $0.enclosure?.attributes?.url, description: $0.description )}
+        items = rssFeed?.items?.map { RSSFeedItemResponse(title: $0.title?.trimmingCharacters(in: .whitespacesAndNewlines), link: $0.link?.trimmingCharacters(in: .whitespacesAndNewlines), publishedDate: $0.pubDate, mediaContentsURL: $0.media?.mediaContents?.first?.attributes?.url, enclosureURL: $0.enclosure?.attributes?.url, description: $0.description )}
     }
 }
