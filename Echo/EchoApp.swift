@@ -6,7 +6,6 @@
 //
 
 import Data
-import Feed
 import Firebase
 import SDWebImage
 import SwiftData

@@ -1,6 +1,6 @@
 //
 //  FeedCell.swift
-//
+//  Echo
 //
 //  Created by Michael Kushinski on 10/26/23.
 //
@@ -27,7 +27,7 @@ struct FeedCell: View {
                             ZStack {
                                 Rectangle()
                                     .fill(.separator.opacity(0.5))
-                                Image("echo-icon", bundle: .module)
+                                Image("echo-icon")
                                     .resizable()
                                     .frame(width: 50, height: 50)
                             }

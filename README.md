@@ -7,11 +7,11 @@ A simple RSS reader using the latest iOS features.
 
 ## Features
 - SwiftData to store feed and items offline
-- Swift Package structure for features and various layers
 - [FeedKit](https://github.com/nmdias/FeedKit) to parse RSS feeds
-- [SDWebImage](https://github.com/SDWebImage/SDWebImageSwiftUI) to load remove images
+- [SDWebImage](https://github.com/SDWebImage/SDWebImageSwiftUI) to load remote images
 - Firebase Realtime Datebase to drive feed search index
   - When users add feeds via URL they contributes to the index for future searches.
+- Sorting and filtering by feed
 
 ## Tools
 - Xcode version 15.0+

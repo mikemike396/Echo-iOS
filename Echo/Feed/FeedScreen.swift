@@ -1,10 +1,10 @@
 //
 //  FeedScreen.swift
+//  Echo
 //
 //  Created by Michael Kushinski on 10/24/23.
 //
 
-import AddFeed
 import Data
 import SafariServices
 import SDWebImageSwiftUI

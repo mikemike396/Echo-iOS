@@ -1,5 +1,5 @@
 //
-//  UIApplication+Extensions.swift
+//  UIApplication+.swift
 //
 //
 //  Created by Michael Kushinski on 10/24/23.
