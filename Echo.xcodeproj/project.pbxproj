@@ -139,6 +139,15 @@
 			path = Sheets;
 			sourceTree = "<group>";
 		};
+		6401D2042B0581CD00FAB293 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				6401D1EF2B05687800FAB293 /* Feed */,
+				6401D1EE2B05686900FAB293 /* AddFeed */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
 		641283F22AE821410094A199 = {
 			isa = PBXGroup;
 			children = (
@@ -164,8 +173,7 @@
 		641283FD2AE821410094A199 /* Echo */ = {
 			isa = PBXGroup;
 			children = (
-				6401D1EF2B05687800FAB293 /* Feed */,
-				6401D1EE2B05686900FAB293 /* AddFeed */,
+				6401D2042B0581CD00FAB293 /* Screens */,
 				641283FE2AE821410094A199 /* EchoApp.swift */,
 				641284042AE821420094A199 /* Assets.xcassets */,
 				6442B31C2AE9489700ED892B /* Localizable.xcstrings */,
