@@ -13,7 +13,6 @@
 		6401D1FA2B0568DB00FAB293 /* FeedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6401D1F92B0568DB00FAB293 /* FeedScreen.swift */; };
 		6401D1FC2B0568FE00FAB293 /* AddFeedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6401D1FB2B0568FE00FAB293 /* AddFeedScreen.swift */; };
 		6401D1FE2B05698500FAB293 /* Data in Frameworks */ = {isa = PBXBuildFile; productRef = 6401D1FD2B05698500FAB293 /* Data */; };
-		6401D2002B0569D900FAB293 /* Utilities in Frameworks */ = {isa = PBXBuildFile; productRef = 6401D1FF2B0569D900FAB293 /* Utilities */; };
 		6401D2032B056A1A00FAB293 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 6401D2022B056A1A00FAB293 /* SDWebImageSwiftUI */; };
 		6401D20A2B05846B00FAB293 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6401D2092B05846B00FAB293 /* Screen.swift */; };
 		6401D20D2B0588C900FAB293 /* FeedRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6401D20C2B0588C900FAB293 /* FeedRouter.swift */; };
@@ -79,7 +78,6 @@
 			files = (
 				6401D2032B056A1A00FAB293 /* SDWebImageSwiftUI in Frameworks */,
 				64D8F3062B0CE5A20007AD53 /* FirebaseAnalytics in Frameworks */,
-				6401D2002B0569D900FAB293 /* Utilities in Frameworks */,
 				64CEEEBE2AF54D7C00C0D53F /* FirebaseCrashlytics in Frameworks */,
 				6401D1FE2B05698500FAB293 /* Data in Frameworks */,
 			);
@@ -287,7 +285,6 @@
 			packageProductDependencies = (
 				64CEEEBD2AF54D7C00C0D53F /* FirebaseCrashlytics */,
 				6401D1FD2B05698500FAB293 /* Data */,
-				6401D1FF2B0569D900FAB293 /* Utilities */,
 				6401D2022B056A1A00FAB293 /* SDWebImageSwiftUI */,
 				64D8F3052B0CE5A20007AD53 /* FirebaseAnalytics */,
 			);
@@ -818,10 +815,6 @@
 		6401D1FD2B05698500FAB293 /* Data */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Data;
-		};
-		6401D1FF2B0569D900FAB293 /* Utilities */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Utilities;
 		};
 		6401D2022B056A1A00FAB293 /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

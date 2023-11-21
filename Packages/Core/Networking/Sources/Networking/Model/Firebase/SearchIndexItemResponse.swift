@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct SearchIndexItemResponse: Decodable {
+public struct SearchIndexItemResponse: Decodable, Equatable {
     public let title: String
     public let url: String
 }

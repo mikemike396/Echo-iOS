@@ -5,6 +5,7 @@
 //  Created by Michael Kushinski on 10/25/23.
 //
 
+import Dependencies
 import Foundation
 import Networking
 import SwiftData
@@ -13,14 +14,13 @@ import SwiftSoup
 public actor FeedRepository: ModelActor {
     public let modelContainer: ModelContainer
     public let modelExecutor: any ModelExecutor
-    private let api: APIInterface
+    @Dependency(\.apiClient) private var api: APIClient
 
-    public init(container: ModelContainer = EchoModelContainer.shared.modelContainer, api: APIInterface = APIClient()) {
+    public init(container: ModelContainer = EchoModelContainer.shared.modelContainer) {
         self.modelContainer = container
         let context = ModelContext(container)
         context.autosaveEnabled = false
         self.modelExecutor = DefaultSerialModelExecutor(modelContext: context)
-        self.api = api
     }
     
     /// Calls Firebase to fetch the latest Search indexes
@@ -47,7 +47,7 @@ public actor FeedRepository: ModelActor {
         let rssFeeds = try? modelExecutor.modelContext.fetch(fetchRSSFeeds)
 
         for rssFeed in rssFeeds ?? [] {
-            let feedResponse = try await api.getRSSFeed(for: URL(string: rssFeed.link ?? ""))
+            let feedResponse = try await api.getRSSFeed(URL(string: rssFeed.link ?? ""))
 
             if let feedResponse,
                let link = rssFeed.link
@@ -115,7 +115,7 @@ public actor FeedRepository: ModelActor {
             link = String(link?.dropLast() ?? "")
         }
 
-        let feedResponse = try await api.getRSSFeed(for: URL(string: link ?? ""))
+        let feedResponse = try await api.getRSSFeed(URL(string: link ?? ""))
 
         if let feedResponse,
            let title = feedResponse.title,
@@ -133,7 +133,7 @@ public actor FeedRepository: ModelActor {
             }
             if (try? modelExecutor.modelContext.fetch(descriptor))?.first == nil {
                 /// Send to Firebase Database if its not already in the index
-                try await api.putSearchIndexItem(for: title, link: link)
+                try await api.putSearchIndexItem(title, link)
             }
         }
     }
