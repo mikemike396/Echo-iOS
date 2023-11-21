@@ -10,7 +10,7 @@ import Utilities
 import SwiftData
 import SwiftUI
 
-public struct AddFeedScreen: View {
+struct AddFeedScreen: View {
     // MARK: Environment
 
     @Environment(\.dismiss) private var dismiss
@@ -39,11 +39,11 @@ public struct AddFeedScreen: View {
         return (try? searchIndexItems.filter(searchPredicate)) ?? []
     }
 
-    public init(feedRepo: FeedRepository = FeedRepository()) {
+    init(feedRepo: FeedRepository = FeedRepository()) {
         self.feedRepo = feedRepo
     }
 
-    public var body: some View {
+    var body: some View {
         Form {
             searchSection
             editFeedSection
