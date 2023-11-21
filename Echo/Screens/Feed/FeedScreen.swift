@@ -25,6 +25,10 @@ public struct FeedScreen: View {
 
     @Query(itemsFetchDescriptor, animation: .default) private var items: [RSSFeedItem]
 
+    // MARK: Navigation
+
+    @State private var path = NavigationPath()
+
     // MARK: State Variables
 
     @State private var addFeedPresented = false
@@ -66,40 +70,49 @@ public struct FeedScreen: View {
     }
 
     public var body: some View {
-        VStack {
-            List {
-                ForEach(filteredItems) { item in
+        NavigationStack(path: $path) {
+            VStack {
+                List {
+                    ForEach(filteredItems) { item in
+                        Button {
+                            navigateToLink(item.link)
+                        } label: {
+                            FeedCell(item: item)
+                        }
+                    }
+                }
+                .listStyle(.plain)
+                .refreshable {
+                    try? await feedRepo.syncFeeds()
+                }
+            }
+            .navigationTitle("Feed")
+            .navigationDestination(for: FeedTabScreen.self) { screen in
+                FeedRouter(screen: screen)
+            }
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
                     Button {
-                        navigateToLink(item.link)
+                        filterFeedPresented = true
                     } label: {
-                        FeedCell(item: item)
+                        Image(systemName: activeFilters.isEmpty ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill")
+                    }
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    sortMenu
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        addFeedPresented = true
+                    } label: {
+                        Image(systemName: "plus")
                     }
                 }
             }
-            .listStyle(.plain)
-            .refreshable {
-                try? await feedRepo.syncFeeds()
-            }
         }
-        .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                Button {
-                    filterFeedPresented = true
-                } label: {
-                    Image(systemName: activeFilters.isEmpty ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill")
-                }
-            }
-            ToolbarItem(placement: .bottomBar) {
-                sortMenu
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    addFeedPresented = true
-                } label: {
-                    Image(systemName: "plus")
-                }
-            }
-        }
+        .environment(\.push, .init { path.append($0) })
+        .environment(\.pop, .init { if !path.isEmpty { path.removeLast() }})
+        .environment(\.popToRoot, .init { path = NavigationPath() })
         .onAppear {
             if items.count == 0 {
                 addFeedPresented = true
@@ -115,7 +128,6 @@ public struct FeedScreen: View {
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         }
-        .navigationTitle("Feed")
     }
 }
 

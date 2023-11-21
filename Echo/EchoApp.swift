@@ -37,9 +37,7 @@ struct EchoApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                FeedScreen()
-            }
+            FeedScreen()
         }
         .onChange(of: scenePhase, initial: false) { _, newPhase in
             switch newPhase {
