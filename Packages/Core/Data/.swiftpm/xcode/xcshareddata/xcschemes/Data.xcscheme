@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Utilities"
-               BuildableName = "Utilities"
-               BlueprintName = "Utilities"
+               BlueprintIdentifier = "Data"
+               BuildableName = "Data"
+               BlueprintName = "Data"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,7 +29,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:Utilities.xctestplan"
+            reference = "container:Data.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
@@ -54,9 +54,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Utilities"
-            BuildableName = "Utilities"
-            BlueprintName = "Utilities"
+            BlueprintIdentifier = "Data"
+            BuildableName = "Data"
+            BlueprintName = "Data"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>

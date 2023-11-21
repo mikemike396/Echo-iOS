@@ -1,0 +1,18 @@
+{
+  "configurations" : [
+    {
+      "id" : "B21B2397-E2EA-4B4D-A915-AD4468119CFB",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+
+  ],
+  "version" : 1
+}
