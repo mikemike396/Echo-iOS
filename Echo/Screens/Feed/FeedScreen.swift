@@ -12,7 +12,7 @@ import SwiftData
 import SwiftUI
 import Utilities
 
-public struct FeedScreen: View {
+struct FeedScreen: View {
     // MARK: Environment
 
     @Environment(\.modelContext) private var modelContext
@@ -65,11 +65,11 @@ public struct FeedScreen: View {
         return fetchDescriptor
     }
 
-    public init(feedRepo: FeedRepository = FeedRepository()) {
+    init(feedRepo: FeedRepository = FeedRepository()) {
         self.feedRepo = feedRepo
     }
 
-    public var body: some View {
+    var body: some View {
         NavigationStack(path: $path) {
             VStack {
                 List {

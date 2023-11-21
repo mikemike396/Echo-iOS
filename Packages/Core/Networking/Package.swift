@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/nmdias/FeedKit", exact: "9.1.2"),
-        .package(name: "Firebase", url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.17.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.17.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -22,7 +22,7 @@ let package = Package(
         .target(
             name: "Networking",
             dependencies: ["FeedKit",
-                           .product(name: "FirebaseDatabase", package: "Firebase")
+                           .product(name: "FirebaseDatabase", package: "firebase-ios-sdk"),
                           ]),
         .testTarget(
             name: "NetworkingTests",
