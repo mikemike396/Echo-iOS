@@ -9,13 +9,14 @@ import Foundation
 import Networking
 import SwiftData
 import SwiftSoup
+import SwiftUI
 
 public actor FeedRepository: ModelActor {
     public let modelContainer: ModelContainer
     public let modelExecutor: any ModelExecutor
     private let api: APIInterface
 
-    public init(container: ModelContainer = EchoModelContainer.shared.modelContainer, api: APIInterface = APIClient()) {
+    public init(container: ModelContainer, api: APIInterface = APIClient()) {
         self.modelContainer = container
         let context = ModelContext(container)
         context.autosaveEnabled = false
@@ -201,5 +202,16 @@ extension FeedRepository {
         }
 
         return URL(string: mediaURL ?? "")
+    }
+}
+
+extension EnvironmentValues {
+    private enum FeedRepositoryKey: EnvironmentKey {
+        static let defaultValue: FeedRepository = .init(container: EchoModelContainer.shared.container)
+    }
+
+    public var feedRepository: FeedRepository {
+        get { self[FeedRepositoryKey.self] }
+        set { self[FeedRepositoryKey.self] = newValue }
     }
 }

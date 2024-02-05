@@ -17,15 +17,17 @@ struct EchoApp: App {
 
     // MARK: Initialized Variables
 
-    let container: ModelContainer
+    let modelContainer = EchoModelContainer.shared
+    let feedRepository: FeedRepository
 
     // MARK: Private Variables
 
     @State private var hasEnteredBackground = false
 
     init() {
-        container = EchoModelContainer.shared.modelContainer
         print("App Directory Path: \(NSHomeDirectory())")
+        
+        feedRepository = FeedRepository(container: self.modelContainer.container)
 
         FirebaseApp.configure()
 
@@ -38,6 +40,7 @@ struct EchoApp: App {
     var body: some Scene {
         WindowGroup {
             FeedScreen()
+                .environment(\.feedRepository, feedRepository)
         }
         .onChange(of: scenePhase, initial: false) { _, newPhase in
             switch newPhase {
@@ -51,14 +54,12 @@ struct EchoApp: App {
                 break
             }
         }
-        .modelContainer(container)
+        .modelContainer(modelContainer.container)
     }
 
     private func syncFeeds() {
         Task.detached {
-            let feedRepository = FeedRepository()
             try? await feedRepository.syncFeeds()
-
             try? await feedRepository.getFeedSearchIndex()
         }
     }

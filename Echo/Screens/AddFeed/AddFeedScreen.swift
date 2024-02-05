@@ -15,10 +15,7 @@ struct AddFeedScreen: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
-
-    // MARK: Initialization
-
-    private let feedRepo: FeedRepository
+    @Environment(\.feedRepository) private var feedRepository
 
     // MARK: SwiftData
 
@@ -37,10 +34,6 @@ struct AddFeedScreen: View {
             item.title.localizedStandardContains(addFeedText) || item.link.localizedStandardContains(addFeedText)
         }
         return (try? searchIndexItems.filter(searchPredicate)) ?? []
-    }
-
-    init(feedRepo: FeedRepository = FeedRepository()) {
-        self.feedRepo = feedRepo
     }
 
     var body: some View {
@@ -85,9 +78,9 @@ extension AddFeedScreen {
             linksLoading.insert(link)
             Task {
                 if self.feedAdded(link: link) {
-                    try? await feedRepo.deleteFeed(link: link)
+                    try? await feedRepository.deleteFeed(link: link)
                 } else {
-                    try? await feedRepo.addFeed(link: link)
+                    try? await feedRepository.addFeed(link: link)
                 }
                 linksLoading.remove(link)
             }
@@ -119,7 +112,7 @@ extension AddFeedScreen {
                             if let index = indexSet.first,
                                let feed = feeds[safe: index]
                             {
-                                try? await feedRepo.deleteFeed(link: feed.link)
+                                try? await feedRepository.deleteFeed(link: feed.link)
                             }
                         }
                     }
