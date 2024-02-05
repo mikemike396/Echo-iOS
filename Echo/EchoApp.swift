@@ -7,6 +7,7 @@
 
 import Data
 import Firebase
+import Networking
 import SDWebImage
 import SwiftData
 import SwiftUI
@@ -18,6 +19,7 @@ struct EchoApp: App {
     // MARK: Initialized Variables
 
     let modelContainer = EchoModelContainer.shared
+    let apiClient = APIClient.liveValue
     let feedRepository: FeedRepository
 
     // MARK: Private Variables
@@ -27,7 +29,7 @@ struct EchoApp: App {
     init() {
         print("App Directory Path: \(NSHomeDirectory())")
         
-        feedRepository = FeedRepository(container: self.modelContainer.container)
+        feedRepository = FeedRepository(container: self.modelContainer.container, api: apiClient)
 
         FirebaseApp.configure()
 

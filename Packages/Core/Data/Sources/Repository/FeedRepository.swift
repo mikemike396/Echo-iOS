@@ -14,9 +14,9 @@ import SwiftUI
 public actor FeedRepository: ModelActor {
     public let modelContainer: ModelContainer
     public let modelExecutor: any ModelExecutor
-    private let api: APIInterface
+    private let api: APIClient
 
-    public init(container: ModelContainer, api: APIInterface = APIClient()) {
+    public init(container: ModelContainer, api: APIClient) {
         self.modelContainer = container
         let context = ModelContext(container)
         context.autosaveEnabled = false
@@ -48,7 +48,7 @@ public actor FeedRepository: ModelActor {
         let rssFeeds = try? modelExecutor.modelContext.fetch(fetchRSSFeeds)
 
         for rssFeed in rssFeeds ?? [] {
-            let feedResponse = try await api.getRSSFeed(for: URL(string: rssFeed.link ?? ""))
+            let feedResponse = try await api.getRSSFeed(URL(string: rssFeed.link ?? ""))
 
             if let feedResponse,
                let link = rssFeed.link
@@ -116,7 +116,7 @@ public actor FeedRepository: ModelActor {
             link = String(link?.dropLast() ?? "")
         }
 
-        let feedResponse = try await api.getRSSFeed(for: URL(string: link ?? ""))
+        let feedResponse = try await api.getRSSFeed(URL(string: link ?? ""))
 
         if let feedResponse,
            let title = feedResponse.title,
@@ -134,7 +134,7 @@ public actor FeedRepository: ModelActor {
             }
             if (try? modelExecutor.modelContext.fetch(descriptor))?.first == nil {
                 /// Send to Firebase Database if its not already in the index
-                try await api.putSearchIndexItem(for: title, link: link)
+                try await api.putSearchIndexItem(title, link)
             }
         }
     }
@@ -207,7 +207,7 @@ extension FeedRepository {
 
 extension EnvironmentValues {
     private enum FeedRepositoryKey: EnvironmentKey {
-        static let defaultValue: FeedRepository = .init(container: EchoModelContainer.shared.container)
+        static let defaultValue: FeedRepository = .init(container: EchoModelContainer.shared.container, api: .liveValue)
     }
 
     public var feedRepository: FeedRepository {
