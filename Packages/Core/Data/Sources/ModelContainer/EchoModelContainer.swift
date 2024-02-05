@@ -11,8 +11,8 @@ final public class EchoModelContainer {
     public static let shared = EchoModelContainer()
 
     public init() {}
-
-    public var modelContainer: ModelContainer = {
+    
+    public var container: ModelContainer = {
         let schema = Schema([
             RSSFeed.self,
             RSSFeedItem.self,

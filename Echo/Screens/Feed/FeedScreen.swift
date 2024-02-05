@@ -16,10 +16,7 @@ struct FeedScreen: View {
     // MARK: Environment
 
     @Environment(\.modelContext) private var modelContext
-
-    // MARK: Initialization
-
-    private let feedRepo: FeedRepository
+    @Environment(\.feedRepository) private var feedRepository
 
     // MARK: SwiftData
 
@@ -65,10 +62,6 @@ struct FeedScreen: View {
         return fetchDescriptor
     }
 
-    init(feedRepo: FeedRepository = FeedRepository()) {
-        self.feedRepo = feedRepo
-    }
-
     var body: some View {
         NavigationStack(path: $path) {
             VStack {
@@ -83,7 +76,7 @@ struct FeedScreen: View {
                 }
                 .listStyle(.plain)
                 .refreshable {
-                    try? await feedRepo.syncFeeds()
+                    try? await feedRepository.syncFeeds()
                 }
             }
             .navigationTitle("Feed")
@@ -157,7 +150,7 @@ extension FeedScreen {
         else { return }
 
         Task {
-            try? await feedRepo.setItemRead(link: string)
+            try? await feedRepository.setItemRead(link: string)
         }
 
         let sfViewController = SFSafariViewController(url: url)

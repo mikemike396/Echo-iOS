@@ -23,28 +23,22 @@ struct CoordinatorPopAction {
     }
 }
 
-private enum CoordinatorPushKey: EnvironmentKey {
-    static let defaultValue = CoordinatorPushAction { _ in
-        debugPrint("Push action was invoked, but no value is set")
-    }
-}
-
-private enum CoordinatorPopKey: EnvironmentKey {
-    static let defaultValue = CoordinatorPopAction {
-        debugPrint("Pop action was invoked, but no value is set")
-    }
-}
-
-private enum CoordinatorPopToRootKey: EnvironmentKey {
-    static let defaultValue = CoordinatorPopAction {
-        debugPrint("Pop to root action was invoked, but no value is set")
-    }
-}
-
 extension EnvironmentValues {
+    private enum CoordinatorPushKey: EnvironmentKey {
+        static let defaultValue = CoordinatorPushAction { _ in
+            debugPrint("Push action was invoked, but no value is set")
+        }
+    }
+
     var push: CoordinatorPushAction {
         get { self[CoordinatorPushKey.self] }
         set { self[CoordinatorPushKey.self] = newValue }
+    }
+    
+    private enum CoordinatorPopKey: EnvironmentKey {
+        static let defaultValue = CoordinatorPopAction {
+            debugPrint("Pop action was invoked, but no value is set")
+        }
     }
 
     var pop: CoordinatorPopAction {
@@ -52,6 +46,12 @@ extension EnvironmentValues {
         set { self[CoordinatorPopKey.self] = newValue }
     }
 
+    private enum CoordinatorPopToRootKey: EnvironmentKey {
+        static let defaultValue = CoordinatorPopAction {
+            debugPrint("Pop to root action was invoked, but no value is set")
+        }
+    }
+    
     var popToRoot: CoordinatorPopAction {
         get { self[CoordinatorPopToRootKey.self] }
         set { self[CoordinatorPopToRootKey.self] = newValue }

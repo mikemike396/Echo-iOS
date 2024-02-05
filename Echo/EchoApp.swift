@@ -7,6 +7,7 @@
 
 import Data
 import Firebase
+import Networking
 import SDWebImage
 import SwiftData
 import SwiftUI
@@ -17,15 +18,18 @@ struct EchoApp: App {
 
     // MARK: Initialized Variables
 
-    let container: ModelContainer
+    let modelContainer = EchoModelContainer.shared
+    let apiClient = APIClient.liveValue
+    let feedRepository: FeedRepository
 
     // MARK: Private Variables
 
     @State private var hasEnteredBackground = false
 
     init() {
-        container = EchoModelContainer.shared.modelContainer
         print("App Directory Path: \(NSHomeDirectory())")
+        
+        feedRepository = FeedRepository(container: self.modelContainer.container, api: apiClient)
 
         FirebaseApp.configure()
 
@@ -38,6 +42,7 @@ struct EchoApp: App {
     var body: some Scene {
         WindowGroup {
             FeedScreen()
+                .environment(\.feedRepository, feedRepository)
         }
         .onChange(of: scenePhase, initial: false) { _, newPhase in
             switch newPhase {
@@ -51,14 +56,14 @@ struct EchoApp: App {
                 break
             }
         }
-        .modelContainer(container)
+        .modelContainer(modelContainer.container)
     }
 
     private func syncFeeds() {
         Task.detached {
-            let feedRepository = FeedRepository()
+            /// This has to instantiate a new FeedRepository inside the detached task or else it will run on the mainContext where it was called from
+            let feedRepository = FeedRepository(container: modelContainer.container, api: apiClient)
             try? await feedRepository.syncFeeds()
-
             try? await feedRepository.getFeedSearchIndex()
         }
     }
