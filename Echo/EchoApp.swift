@@ -61,6 +61,8 @@ struct EchoApp: App {
 
     private func syncFeeds() {
         Task.detached {
+            /// This has to instantiate a new FeedRepository inside the detached task or else it will run on the mainContext where it was called from
+            let feedRepository = FeedRepository(container: modelContainer.container, api: apiClient)
             try? await feedRepository.syncFeeds()
             try? await feedRepository.getFeedSearchIndex()
         }
