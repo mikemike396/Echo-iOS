@@ -446,7 +446,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif ! which swiftlint >/dev/null; then\n    echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n    exit 1\nfi\n\nrequired_version=\"0.53.0\"\ninstalled_version=$(swiftlint version | awk '{print $NF}')\n\nif ! awk -v ver1=\"${installed_version}\" -v ver2=\"${required_version}\" 'BEGIN{if (ver1<ver2) exit 1}'; then\n    echo \"error: SwiftLint version ${required_version} or greater is required, installed version is ${installed_version}\"\n    exit 1\nfi\n\nswiftlint\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
