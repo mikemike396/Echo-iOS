@@ -93,12 +93,5 @@ extension APIClient {
 }
 
 extension EnvironmentValues {
-    private enum APIClientKey: EnvironmentKey {
-        static let defaultValue = APIClient.liveValue
-    }
-
-    public var apiClient: APIClient {
-        get { self[APIClientKey.self] }
-        set { self[APIClientKey.self] = newValue }
-    }
+    @Entry public var apiClient: APIClient = .liveValue
 }

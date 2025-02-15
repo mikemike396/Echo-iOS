@@ -206,12 +206,5 @@ extension FeedRepository {
 }
 
 extension EnvironmentValues {
-    private enum FeedRepositoryKey: EnvironmentKey {
-        static let defaultValue: FeedRepository = .init(container: EchoModelContainer.shared.container, api: .liveValue)
-    }
-
-    public var feedRepository: FeedRepository {
-        get { self[FeedRepositoryKey.self] }
-        set { self[FeedRepositoryKey.self] = newValue }
-    }
+    @Entry public var feedRepository: FeedRepository = .init(container: EchoModelContainer.shared.container, api: .liveValue)
 }
