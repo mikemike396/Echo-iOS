@@ -42,7 +42,6 @@ struct EchoApp: App {
     var body: some Scene {
         WindowGroup {
             FeedScreen()
-                .environment(\.feedRepository, feedRepository)
         }
         .onChange(of: scenePhase, initial: false) { _, newPhase in
             switch newPhase {
